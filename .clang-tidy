@@ -1,0 +1,23 @@
+---
+Checks: >
+  bugprone-*,
+  modernize-use-nullptr,
+  modernize-use-override,
+  modernize-use-noexcept,
+  modernize-use-default-member-init,
+  modernize-use-emplace,
+  readability-redundant-smartptr-get,
+  readability-redundant-string-cstr,
+  readability-container-size-empty,
+  performance-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-macro-parentheses,
+  -bugprone-throwing-static-initialization,
+  -performance-avoid-endl,
+  -cert-err58-cpp
+
+WarningsAsErrors: ""
+
+HeaderFilterRegex: "^(include|src)/.*"
+
+FormatStyle: none

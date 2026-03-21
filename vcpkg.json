@@ -1,0 +1,10 @@
+{
+  "name": "infowidgets",
+  "version": "1.0.0",
+  "dependencies": [
+    "spdlog",
+    "simpleini",
+    "rapidcsv",
+    "tomlplusplus"
+  ]
+}

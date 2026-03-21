@@ -1,0 +1,87 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Patch CommonLibSSE-NG for clang compatibility
+        shell: bash
+        run: |
+          sed -i 's/a_rhs\.storage\.address/a_rhs._storage.address/' extern/CommonLibSSE-NG/include/RE/B/BSTPointerAndFlags.h
+          sed -i 's/a_src\.Begin()/a_src.begin()/g; s/a_src\.End()/a_src.end()/g' extern/CommonLibSSE-NG/include/RE/G/GHashSetBase.h
+
+      - name: Configure CMake (Ninja, for compile_commands.json)
+        run: >
+          cmake -B build-lint -S .
+          -G Ninja
+          -DCMAKE_C_COMPILER=clang-cl
+          -DCMAKE_CXX_COMPILER=clang-cl
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+
+      - name: Run clang-tidy
+        shell: bash
+        run: |
+          run-clang-tidy -quiet -extra-arg=-w -p build-lint infowidgets.src
+
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        run: >
+          cmake -B build -S .
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Rename ZIP with commit SHA
+        shell: bash
+        run: |
+          short="${GITHUB_SHA::7}"
+          for f in build/InfoWidget-*.zip; do
+            mv "$f" "build/InfoWidgets-${short}.zip"
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: InfoWidgets-${{ github.sha }}
+          path: build/InfoWidgets-*.zip
+          if-no-files-found: error
+
+      - name: Publish rolling release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          short="${GITHUB_SHA::7}"
+          gh release delete rolling --yes 2>/dev/null || true
+          git push --delete origin rolling 2>/dev/null || true
+          gh release create rolling \
+            --prerelease \
+            --title "Rolling Release (${short})" \
+            --notes "Automated build from commit [\`${short}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})" \
+            "build/InfoWidgets-${short}.zip"
