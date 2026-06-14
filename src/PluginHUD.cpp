@@ -4,6 +4,7 @@
 #include "AttackSpeedWidget.h"
 #include "D3DRenderer.h"
 #include "FoodWidget.h"
+#include "GeneralConfig.h"
 #include "LightWidget.h"
 #include "NoiseWidget.h"
 #include "ToxicityWidget.h"
@@ -22,6 +23,9 @@ namespace InfoWidgets::PluginHUD
 
     constexpr auto configFile = "Data/SKSE/Plugins/InfoWidgets.toml";
     static toml::table config;
+
+    static GeneralConfig generalConfig;
+    static void renderGeneralConfig() { generalConfig.renderConfig(config); }
 
     static NoiseTextWidget noiseTextWidget;
     WIDGET_RENDER_FUNCTION(noiseTextWidget);
@@ -76,6 +80,7 @@ namespace InfoWidgets::PluginHUD
 
     static void saveConfig()
     {
+        generalConfig.saveConfig(config);
         for (auto *widget : widgets)
         {
             widget->saveConfig(config);
@@ -177,6 +182,9 @@ namespace InfoWidgets::PluginHUD
 
     static void RenderHUD()
     {
+        if (!generalConfig.isHudVisible())
+            return;
+
         if (!ShouldDisplay())
             return;
 
@@ -203,6 +211,7 @@ namespace InfoWidgets::PluginHUD
             SKSE::log::error("LoadConfig: failed to parse '{}': {}", configFile, e.description());
             return;
         }
+        generalConfig.configure(config);
         for (auto *widget : widgets)
         {
             widget->configure(config);
@@ -216,7 +225,10 @@ namespace InfoWidgets::PluginHUD
         D3DRenderer::SetRenderCallback(RenderHUD);
         D3DRenderer::Install();
 
+        RE::BSInputDeviceManager::GetSingleton()->AddEventSink(generalConfig.inputSink());
+
         SKSEMenuFramework::SetSection(Plugin::Name);
+        SKSEMenuFramework::AddSectionItem("General", renderGeneralConfig);
         SKSEMenuFramework::AddSectionItem("Widgets / Noise Text", rendernoiseTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Noise Icon", rendernoiseIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Light Text", renderlightTextWidgetSettings);
