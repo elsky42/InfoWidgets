@@ -41,6 +41,8 @@ jobs:
           sed -i 's/a_src\.Begin()/a_src.begin()/g; s/a_src\.End()/a_src.end()/g' extern/CommonLibSSE-NG/include/RE/G/GHashSetBase.h
 
       - name: Configure CMake
+        env:
+          VCPKG_ROOT: C:/vcpkg
         run: cmake --preset lint -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Run clang-tidy
