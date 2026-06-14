@@ -19,6 +19,21 @@ jobs:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up sccache
+        uses: mozilla/sccache-action@v0.0.5
+
+      - name: Set up vcpkg binary cache
+        shell: bash
+        run: |
+          mkdir -p "${{ github.workspace }}/vcpkg-cache"
+          echo "VCPKG_DEFAULT_BINARY_CACHE=${{ github.workspace }}/vcpkg-cache" >> "$GITHUB_ENV"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg-cache
+          key: vcpkg-x64-windows-static-md-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-x64-windows-static-md-
+
       - name: Update version in CMakeLists.txt
         shell: bash
         run: |
@@ -30,6 +45,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
           -DVCPKG_TARGET_TRIPLET=x64-windows-static-md
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Build
         run: cmake --build build --config Release --parallel

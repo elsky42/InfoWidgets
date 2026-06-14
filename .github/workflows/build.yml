@@ -17,6 +17,21 @@ jobs:
 
       - uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Set up sccache
+        uses: mozilla/sccache-action@v0.0.5
+
+      - name: Set up vcpkg binary cache
+        shell: bash
+        run: |
+          mkdir -p "${{ github.workspace }}/vcpkg-cache"
+          echo "VCPKG_DEFAULT_BINARY_CACHE=${{ github.workspace }}/vcpkg-cache" >> "$GITHUB_ENV"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg-cache
+          key: vcpkg-lint-x64-windows-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-lint-x64-windows-
+
       - name: Patch CommonLibSSE-NG for clang compatibility
         shell: bash
         run: |
@@ -31,6 +46,8 @@ jobs:
           -DCMAKE_CXX_COMPILER=clang-cl
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Run clang-tidy
         shell: bash
@@ -47,12 +64,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set up sccache
+        uses: mozilla/sccache-action@v0.0.5
+
+      - name: Set up vcpkg binary cache
+        shell: bash
+        run: |
+          mkdir -p "${{ github.workspace }}/vcpkg-cache"
+          echo "VCPKG_DEFAULT_BINARY_CACHE=${{ github.workspace }}/vcpkg-cache" >> "$GITHUB_ENV"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg-cache
+          key: vcpkg-x64-windows-static-md-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-x64-windows-static-md-
+
       - name: Configure CMake
         run: >
           cmake -B build -S .
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
           -DVCPKG_TARGET_TRIPLET=x64-windows-static-md
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Build
         run: cmake --build build --config Release --parallel
