@@ -9,6 +9,8 @@ on:
 jobs:
   lint:
     runs-on: windows-latest
+    env:
+      VCPKG_ROOT: C:/vcpkg
 
     steps:
       - uses: actions/checkout@v4
@@ -38,16 +40,8 @@ jobs:
           sed -i 's/a_rhs\.storage\.address/a_rhs._storage.address/' extern/CommonLibSSE-NG/include/RE/B/BSTPointerAndFlags.h
           sed -i 's/a_src\.Begin()/a_src.begin()/g; s/a_src\.End()/a_src.end()/g' extern/CommonLibSSE-NG/include/RE/G/GHashSetBase.h
 
-      - name: Configure CMake (Ninja, for compile_commands.json)
-        run: >
-          cmake -B build-lint -S .
-          -G Ninja
-          -DCMAKE_C_COMPILER=clang-cl
-          -DCMAKE_CXX_COMPILER=clang-cl
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
-          -DCMAKE_C_COMPILER_LAUNCHER=sccache
-          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+      - name: Configure CMake
+        run: cmake --preset lint -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Run clang-tidy
         shell: bash
@@ -58,6 +52,8 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: write
+    env:
+      VCPKG_ROOT: C:/vcpkg
 
     steps:
       - uses: actions/checkout@v4
@@ -80,16 +76,10 @@ jobs:
           restore-keys: vcpkg-x64-windows-static-md-
 
       - name: Configure CMake
-        run: >
-          cmake -B build -S .
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
-          -DVCPKG_TARGET_TRIPLET=x64-windows-static-md
-          -DCMAKE_C_COMPILER_LAUNCHER=sccache
-          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+        run: cmake --preset release -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Build
-        run: cmake --build build --config Release --parallel
+        run: cmake --build --preset release --parallel
 
       - name: Rename ZIP with commit SHA
         shell: bash

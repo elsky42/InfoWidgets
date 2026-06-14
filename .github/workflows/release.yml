@@ -12,6 +12,8 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: write
+    env:
+      VCPKG_ROOT: C:/vcpkg
 
     steps:
       - uses: actions/checkout@v4
@@ -40,16 +42,10 @@ jobs:
           sed -i -E "s/(VERSION )[0-9]+\.[0-9]+\.[0-9]+/\1${{ inputs.version }}/" CMakeLists.txt
 
       - name: Configure CMake
-        run: >
-          cmake -B build -S .
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
-          -DVCPKG_TARGET_TRIPLET=x64-windows-static-md
-          -DCMAKE_C_COMPILER_LAUNCHER=sccache
-          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+        run: cmake --preset release -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Build
-        run: cmake --build build --config Release --parallel
+        run: cmake --build --preset release --parallel
 
       - name: Commit and push version bump
         shell: bash
