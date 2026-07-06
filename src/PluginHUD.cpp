@@ -6,7 +6,10 @@
 #include "FoodWidget.h"
 #include "GeneralConfig.h"
 #include "LightWidget.h"
+#include "HealthRegenWidget.h"
+#include "MagickaRegenWidget.h"
 #include "NoiseWidget.h"
+#include "StaminaRegenWidget.h"
 #include "ToxicityWidget.h"
 #include "VampireStageWidget.h"
 #include "Version.h"
@@ -59,6 +62,18 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(toxicityTextWidget);
     static ToxicityIconWidget toxicityIconWidget;
     WIDGET_RENDER_FUNCTION(toxicityIconWidget);
+    static MagickaRegenTextWidget magickaRegenTextWidget;
+    WIDGET_RENDER_FUNCTION(magickaRegenTextWidget);
+    static MagickaRegenIconWidget magickaRegenIconWidget;
+    WIDGET_RENDER_FUNCTION(magickaRegenIconWidget);
+    static HealthRegenTextWidget healthRegenTextWidget;
+    WIDGET_RENDER_FUNCTION(healthRegenTextWidget);
+    static HealthRegenIconWidget healthRegenIconWidget;
+    WIDGET_RENDER_FUNCTION(healthRegenIconWidget);
+    static StaminaRegenTextWidget staminaRegenTextWidget;
+    WIDGET_RENDER_FUNCTION(staminaRegenTextWidget);
+    static StaminaRegenIconWidget staminaRegenIconWidget;
+    WIDGET_RENDER_FUNCTION(staminaRegenIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -76,7 +91,13 @@ namespace InfoWidgets::PluginHUD
         &mainHandAttackSpeedIconWidget,
         &offHandAttackSpeedIconWidget,
         &toxicityTextWidget,
-        &toxicityIconWidget};
+        &toxicityIconWidget,
+        &magickaRegenTextWidget,
+        &magickaRegenIconWidget,
+        &healthRegenTextWidget,
+        &healthRegenIconWidget,
+        &staminaRegenTextWidget,
+        &staminaRegenIconWidget};
 
     static void saveConfig()
     {
@@ -245,6 +266,12 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Off Hand Attack Speed Icon", renderoffHandAttackSpeedIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Toxicity Text", rendertoxicityTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Toxicity Icon", rendertoxicityIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Magicka Regen Text", rendermagickaRegenTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Magicka Regen Icon", rendermagickaRegenIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Health Regen Text", renderhealthRegenTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Health Regen Icon", renderhealthRegenIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Text", renderstaminaRegenTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Icon", renderstaminaRegenIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Save and Load Configuration", renderSaveLoadConfiguration);
         SKSEMenuFramework::AddSectionItem("About", renderAbout);
     }
