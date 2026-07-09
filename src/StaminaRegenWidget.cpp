@@ -1,5 +1,7 @@
 #include "StaminaRegenWidget.h"
 
+#include "FlatRegenCache.h"
+
 using namespace ImGuiMCP;
 
 namespace InfoWidgets
@@ -18,7 +20,8 @@ namespace InfoWidgets
         const float maxStamina = player->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kStamina);
         const float regenRate = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStaminaRate);
         const float regenMult = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStaminaRateMult);
-        const float regenPerSecond = maxStamina * (regenRate / 100.0f) * (regenMult / 100.0f);
+        const float regenPerSecond = maxStamina * (regenRate / 100.0f) * (regenMult / 100.0f)
+                                   + FlatRegenCache::get().stamina;
         _text = std::format("{:.1f}/s", regenPerSecond);
     }
 

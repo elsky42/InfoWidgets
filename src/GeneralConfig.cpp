@@ -1,5 +1,6 @@
 #include <format>
 
+#include "D3DRenderer.h"
 #include "GeneralConfig.h"
 
 namespace InfoWidgets
@@ -86,6 +87,10 @@ namespace InfoWidgets
         if (root.empty())
             return;
         _toggleKey.store(root.at_path("General.toggleKey").value_or(0u));
+        _textFontPath = root.at_path("General.textFont").value_or(std::string{});
+        _textFontSize = root.at_path("General.fontSize").value_or(20.0f);
+        D3DRenderer::SetTextFontPath(_textFontPath);
+        D3DRenderer::SetTextFontSize(_textFontSize);
     }
 
     void GeneralConfig::saveConfig(toml::table &root)
@@ -93,7 +98,10 @@ namespace InfoWidgets
         auto s = widgetConfigName();
         if (!root.contains(s))
             root.insert(s, toml::table{});
-        root.get_as<toml::table>(s)->insert_or_assign("toggleKey", _toggleKey.load());
+        auto &sec = *root.get_as<toml::table>(s);
+        sec.insert_or_assign("toggleKey", _toggleKey.load());
+        sec.insert_or_assign("textFont", _textFontPath);
+        sec.insert_or_assign("fontSize", _textFontSize);
     }
 
     bool GeneralConfig::renderConfig(toml::table & /*root*/)
@@ -140,6 +148,44 @@ namespace InfoWidgets
                 changed = true;
             }
         }
+        ImGuiMCP::ImGui::Separator();
+
+        const auto &fonts = D3DRenderer::AvailableFonts();
+        int selected = -1; // -1 = default
+        for (int i = 0; i < static_cast<int>(fonts.size()); ++i)
+            if (fonts[i].path == _textFontPath) { selected = i; break; }
+
+        const char *preview = (selected < 0) ? "(Default)" : fonts[selected].displayName.c_str();
+        if (ImGuiMCP::ImGui::BeginCombo("Text Font", preview))
+        {
+            if (ImGuiMCP::ImGui::Selectable("(Default)", selected < 0))
+            {
+                _textFontPath = "";
+                D3DRenderer::SetTextFontPath("");
+                changed = true;
+            }
+            if (selected < 0) ImGuiMCP::ImGui::SetItemDefaultFocus();
+
+            for (int i = 0; i < static_cast<int>(fonts.size()); ++i)
+            {
+                bool isSel = (i == selected);
+                if (ImGuiMCP::ImGui::Selectable(fonts[i].displayName.c_str(), isSel))
+                {
+                    _textFontPath = fonts[i].path;
+                    D3DRenderer::SetTextFontPath(_textFontPath);
+                    changed = true;
+                }
+                if (isSel) ImGuiMCP::ImGui::SetItemDefaultFocus();
+            }
+            ImGuiMCP::ImGui::EndCombo();
+        }
+
+        if (ImGuiMCP::ImGui::DragFloat("Font Size", &_textFontSize, 0.5f, 8.0f, 64.0f, "%.0f"))
+        {
+            D3DRenderer::SetTextFontSize(_textFontSize);
+            changed = true;
+        }
+
         return changed;
     }
 }

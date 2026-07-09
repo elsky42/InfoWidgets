@@ -1,5 +1,7 @@
 #include "HealthRegenWidget.h"
 
+#include "FlatRegenCache.h"
+
 using namespace ImGuiMCP;
 
 namespace InfoWidgets
@@ -18,7 +20,8 @@ namespace InfoWidgets
         const float maxHealth = player->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kHealth);
         const float regenRate = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealRate);
         const float regenMult = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealRateMult);
-        const float regenPerSecond = maxHealth * (regenRate / 100.0f) * (regenMult / 100.0f);
+        const float regenPerSecond = maxHealth * (regenRate / 100.0f) * (regenMult / 100.0f)
+                                   + FlatRegenCache::get().health;
         _text = std::format("{:.1f}/s", regenPerSecond);
     }
 

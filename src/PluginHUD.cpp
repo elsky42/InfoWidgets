@@ -3,6 +3,7 @@
 #include "PCH.h"
 #include "AttackSpeedWidget.h"
 #include "D3DRenderer.h"
+#include "FlatRegenCache.h"
 #include "FoodWidget.h"
 #include "GeneralConfig.h"
 #include "LightWidget.h"
@@ -210,6 +211,7 @@ namespace InfoWidgets::PluginHUD
             return;
 
         const float deltaTime = D3DRenderer::GetDeltaTime();
+        FlatRegenCache::tick(deltaTime);
         for (auto *widget : widgets)
         {
             widget->updateAndRender(deltaTime);

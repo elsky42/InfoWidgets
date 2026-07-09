@@ -18,25 +18,59 @@ namespace InfoWidgets::D3DRenderer
     static ImFont *font_text = nullptr;
     static ImFont *font_icon = nullptr;
 
-    static void TryLoadJost(ImGuiIO &io, float fontSize)
+    static std::string g_textFontPath;
+    static float g_textFontSize = 20.0f;
+    static bool g_fontReloadPending = false;
+
+    static std::vector<FontEntry> g_availableFonts;
+    static bool g_fontsScanned = false;
+
+    static void ScanFontsDir(const std::filesystem::path &dir, std::vector<FontEntry> &out)
     {
-        const char *path = "Data/SKSE/Plugins/InfoWidgets/Fonts/static/Jost-Regular.ttf";
-        if (!std::filesystem::exists(path))
+        std::error_code ec;
+        for (auto it = std::filesystem::recursive_directory_iterator(dir, ec);
+             it != std::filesystem::recursive_directory_iterator();
+             it.increment(ec))
         {
-            SKSE::log::error("TryLoadJost: font file does not exist at path: {}", path);
-            return;
+            if (ec)
+                break;
+            if (!it->is_regular_file(ec) || ec)
+                continue;
+            const auto &p = it->path();
+            auto ext = p.extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c) { return std::tolower(c); });
+            if (ext != ".ttf" && ext != ".otf")
+                continue;
+            if (p.filename() == "fa-solid-900.ttf")
+                continue;
+            out.push_back({p.stem().string(), p.string()});
         }
+    }
+
+    static void TryLoadTextFont(ImGuiIO &io)
+    {
         ImFontConfig cfg{};
         cfg.PixelSnapH = true;
         cfg.OversampleH = 1;
         cfg.OversampleV = 1;
 
-        font_text = io.Fonts->AddFontFromFileTTF(path, fontSize, &cfg, nullptr);
-        if (!font_text)
-            SKSE::log::error("TryLoadJost: failed to load Jost font from '{}'", path);
+        auto tryPath = [&](const char *path) -> bool {
+            if (!path || !*path || !std::filesystem::exists(path))
+                return false;
+            font_text = io.Fonts->AddFontFromFileTTF(path, g_textFontSize, &cfg, nullptr);
+            if (font_text)
+                SKSE::log::info("D3DRenderer: loaded text font '{}'", path);
+            else
+                SKSE::log::error("D3DRenderer: failed to load font '{}'", path);
+            return font_text != nullptr;
+        };
+
+        if (!g_textFontPath.empty() && tryPath(g_textFontPath.c_str()))
+            return;
+        tryPath("Data/SKSE/Plugins/InfoWidgets/Fonts/static/Jost-Regular.ttf");
     }
 
-    static void TryLoadFontAwesome(ImGuiIO &io, float fontSize)
+    static void TryLoadFontAwesome(ImGuiIO &io)
     {
         if (!font_text)
         {
@@ -58,11 +92,28 @@ namespace InfoWidgets::D3DRenderer
         cfg.OversampleV = 1;
         cfg.MergeMode = true;
 
-        font_icon = io.Fonts->AddFontFromFileTTF(path, fontSize, &cfg, faRanges);
+        font_icon = io.Fonts->AddFontFromFileTTF(path, g_textFontSize, &cfg, faRanges);
         if (font_icon)
             SKSE::log::info("D3DRenderer: loaded Font Awesome");
         else
             SKSE::log::warn("D3DRenderer: Font Awesome not found, icon widgets will be invisible");
+    }
+
+    static void ReloadFonts()
+    {
+        ImGui::SetCurrentContext(g_imguiContext);
+        ImGuiIO &io = ImGui::GetIO();
+        font_text = nullptr;
+        font_icon = nullptr;
+        ImGui_ImplDX11_InvalidateDeviceObjects();
+        io.Fonts->Clear();
+        TryLoadTextFont(io);
+        TryLoadFontAwesome(io);
+        if (!font_text)
+            font_text = io.Fonts->AddFontDefault();
+        io.Fonts->Build();
+        ImGui_ImplDX11_CreateDeviceObjects();
+        SKSE::log::info("D3DRenderer: font atlas rebuilt");
     }
 
     static bool Init()
@@ -86,9 +137,8 @@ namespace InfoWidgets::D3DRenderer
         io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
 
-        constexpr float kFontSize = 20.0f;
-        TryLoadJost(io, kFontSize);
-        TryLoadFontAwesome(io, kFontSize);
+        TryLoadTextFont(io);
+        TryLoadFontAwesome(io);
         if (!font_text)
         {
             SKSE::log::warn("D3DRenderer: falling back to built-in ProggyClean for text font");
@@ -144,6 +194,12 @@ namespace InfoWidgets::D3DRenderer
         {
             g_displayW = static_cast<float>(desc.BufferDesc.Width);
             g_displayH = static_cast<float>(desc.BufferDesc.Height);
+        }
+
+        if (g_fontReloadPending)
+        {
+            g_fontReloadPending = false;
+            ReloadFonts();
         }
 
         ImGui::SetCurrentContext(g_imguiContext);
@@ -212,4 +268,34 @@ namespace InfoWidgets::D3DRenderer
 
     ImFont *TextFont() { return font_text; }
     ImFont *IconFont() { return font_icon; }
+
+    const std::vector<FontEntry>& AvailableFonts()
+    {
+        if (g_fontsScanned)
+            return g_availableFonts;
+        g_fontsScanned = true;
+
+        ScanFontsDir("Data/SKSE/Plugins/InfoWidgets/Fonts", g_availableFonts);
+
+        char windir[MAX_PATH]{};
+        if (GetEnvironmentVariableA("WINDIR", windir, MAX_PATH) > 0)
+            ScanFontsDir(std::filesystem::path(windir) / "Fonts", g_availableFonts);
+
+        std::sort(g_availableFonts.begin(), g_availableFonts.end(),
+                  [](const FontEntry &a, const FontEntry &b) { return a.displayName < b.displayName; });
+
+        return g_availableFonts;
+    }
+
+    void SetTextFontPath(std::string path)
+    {
+        g_textFontPath = std::move(path);
+        if (g_initialized) g_fontReloadPending = true;
+    }
+
+    void SetTextFontSize(float size)
+    {
+        g_textFontSize = size;
+        if (g_initialized) g_fontReloadPending = true;
+    }
 }

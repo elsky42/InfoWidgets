@@ -19,4 +19,17 @@ namespace InfoWidgets::D3DRenderer
 
     ImFont *TextFont();
     ImFont *IconFont();
+
+    struct FontEntry
+    {
+        std::string displayName;
+        std::string path;
+    };
+
+    // Scans InfoWidgets/Fonts/ and Windows system fonts; result is cached.
+    const std::vector<FontEntry>& AvailableFonts();
+
+    // Must be called before the first frame (i.e. from LoadConfig).
+    void SetTextFontPath(std::string path);
+    void SetTextFontSize(float size);
 }
