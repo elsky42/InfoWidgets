@@ -123,9 +123,8 @@ namespace InfoWidgets
             if (root.empty())
                 return;
             _color = ColorConfig::loadColorFromConfig(root.at_path(section + ".color"), _color);
-            _shadowColor = ColorConfig::loadColorFromConfig(root.at_path(section + ".shadowColor"), _shadowColor);
-            _backgroundColor = ColorConfig::loadColorFromConfig(root.at_path(section + ".backgroundColor"), _backgroundColor);
             _outlineColor = ColorConfig::loadColorFromConfig(root.at_path(section + ".outlineColor"), _outlineColor);
+            _outlineSize = root.at_path(section + ".outlineSize").value_or(_outlineSize);
         }
 
         void saveConfig(toml::table &root, const std::string &section)
@@ -135,36 +134,28 @@ namespace InfoWidgets
             auto &sec = *root.get_as<toml::table>(section);
             if (!sec.contains("color"))
                 sec.insert("color", toml::table{});
-            if (!sec.contains("shadowColor"))
-                sec.insert("shadowColor", toml::table{});
-            if (!sec.contains("backgroundColor"))
-                sec.insert("backgroundColor", toml::table{});
             if (!sec.contains("outlineColor"))
                 sec.insert("outlineColor", toml::table{});
             ColorConfig::saveColorToConfig(_color, *sec.get_as<toml::table>("color"));
-            ColorConfig::saveColorToConfig(_shadowColor, *sec.get_as<toml::table>("shadowColor"));
-            ColorConfig::saveColorToConfig(_backgroundColor, *sec.get_as<toml::table>("backgroundColor"));
             ColorConfig::saveColorToConfig(_outlineColor, *sec.get_as<toml::table>("outlineColor"));
+            sec.insert_or_assign("outlineSize", _outlineSize);
         }
 
         bool renderConfig()
         {
-            return ImGuiMCP::ImGui::ColorEdit4("Color", &_color.x, ImGuiMCP::ImGuiColorEditFlags_Float) ||
-                   ImGuiMCP::ImGui::ColorEdit4("Shadow Color", &_shadowColor.x, ImGuiMCP::ImGuiColorEditFlags_Float) ||
-                   ImGuiMCP::ImGui::ColorEdit4("Background Color", &_backgroundColor.x, ImGuiMCP::ImGuiColorEditFlags_Float) ||
-                   ImGuiMCP::ImGui::ColorEdit4("Outline Color", &_outlineColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
+            bool changed = ImGuiMCP::ImGui::ColorEdit4("Color", &_color.x, ImGuiMCP::ImGuiColorEditFlags_Float);
+            changed |= ImGuiMCP::ImGui::ColorEdit4("Outline Color", &_outlineColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
+            changed |= ImGuiMCP::ImGui::DragInt("Outline Size", &_outlineSize, 0.1f, 0, 8);
+            return changed;
         }
 
         unsigned int color() const { return DrawUtils::rgbaToColor(_valueColor.value_or(_color)); }
-        unsigned int shadowColor() const { return DrawUtils::rgbaToColor(_shadowColor); }
-        unsigned int backgroundColor() const { return DrawUtils::rgbaToColor(_backgroundColor); }
         unsigned int outlineColor() const { return DrawUtils::rgbaToColor(_outlineColor); }
 
     protected:
         ImGuiMCP::ImVec4 _color{1.0f, 1.0f, 1.0f, 1.0f};
-        ImGuiMCP::ImVec4 _shadowColor{0.0f, 0.0f, 0.0f, 0.0f};
-        ImGuiMCP::ImVec4 _backgroundColor{0.0f, 0.0f, 0.0f, 0.0f};
-        ImGuiMCP::ImVec4 _outlineColor{0.0f, 0.0f, 0.0f, 0.0f};
+        ImGuiMCP::ImVec4 _outlineColor{0.0f, 0.0f, 0.0f, 1.0f};
+        int _outlineSize{1};
         std::optional<ImGuiMCP::ImVec4> _valueColor{std::nullopt};
     };
 

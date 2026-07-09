@@ -28,29 +28,13 @@ namespace InfoWidgets
         auto pos = normalizedPosition();
         float size = normalizedSize();
 
-        if (_backgroundColor.w > 0.0f)
-        {
-            constexpr float kPad = 2.0f;
-            ImVec2 ts = f->CalcTextSizeA(size, FLT_MAX, 0.0f, _text.c_str());
-            D3DRenderer::AddRectFilled(
-                pos.x - kPad, pos.y - kPad,
-                pos.x + ts.x + kPad, pos.y + ts.y + kPad,
-                backgroundColor());
-        }
-
-        if (_outlineColor.w > 0.0f)
+        if (_outlineColor.w > 0.0f && _outlineSize > 0)
         {
             unsigned int oc = outlineColor();
-            D3DRenderer::AddText(pos.x - 1.0f, pos.y, size, oc, f, _text.c_str());
-            D3DRenderer::AddText(pos.x + 1.0f, pos.y, size, oc, f, _text.c_str());
-            D3DRenderer::AddText(pos.x, pos.y - 1.0f, size, oc, f, _text.c_str());
-            D3DRenderer::AddText(pos.x, pos.y + 1.0f, size, oc, f, _text.c_str());
-        }
-
-        if (_shadowColor.w > 0.0f)
-        {
-            auto shadow = normalizedShadowPosition();
-            D3DRenderer::AddText(shadow.x, shadow.y, size, shadowColor(), f, _text.c_str());
+            for (int dx = -_outlineSize; dx <= _outlineSize; ++dx)
+                for (int dy = -_outlineSize; dy <= _outlineSize; ++dy)
+                    if (dx != 0 || dy != 0)
+                        D3DRenderer::AddText(pos.x + dx, pos.y + dy, size, oc, f, _text.c_str());
         }
 
         D3DRenderer::AddText(pos.x, pos.y, size, color(), f, _text.c_str());
