@@ -27,8 +27,9 @@ namespace InfoWidgets::FlatRegenCache
             if (effect->flags.any(RE::ActiveEffect::Flag::kInactive) ||
                 effect->flags.any(RE::ActiveEffect::Flag::kDispelled))
                 continue;
-            // must have remaining duration (excludes instant one-shot restores)
-            if (effect->duration <= 0.0f || effect->elapsedSeconds >= effect->duration)
+            // duration == 0 means permanent (ability); skip only if it has a positive
+            // duration that has already elapsed (expired potion/spell).
+            if (effect->duration > 0.0f && effect->elapsedSeconds >= effect->duration)
                 continue;
             if (effect->magnitude <= 0.0f)
                 continue;
