@@ -1,5 +1,9 @@
 #include "PluginHUD.h"
 
+#include <cerrno>
+#include <cstring>
+#include <filesystem>
+
 #include "PCH.h"
 #include "AttackSpeedWidget.h"
 #include "D3DRenderer.h"
@@ -107,14 +111,30 @@ namespace InfoWidgets::PluginHUD
         {
             widget->saveConfig(config);
         }
+
+        try
+        {
+            std::filesystem::path p(configFile);
+            if (p.has_parent_path())
+            {
+                std::filesystem::create_directories(p.parent_path());
+            }
+        }
+        catch (const std::filesystem::filesystem_error &e)
+        {
+            SKSE::log::error("Failed to create parent directories for config file {}: {}", configFile, e.what());
+            return;
+        }
+
         std::ofstream file(configFile);
         if (file.is_open())
         {
+            SKSE::log::info("Wrote file {}", configFile);
             file << config;
         }
         else
         {
-            SKSE::log::error("Failed to open config file for writing");
+            SKSE::log::error("Failed to open config file {} for writing: {}", configFile, std::strerror(errno));
         }
     }
 
@@ -222,11 +242,13 @@ namespace InfoWidgets::PluginHUD
     {
         if (!std::filesystem::exists(configFile))
         {
+            SKSE::log::info("No config file {} found", configFile);
             std::ofstream{configFile}.close();
             return;
         }
         try
         {
+            SKSE::log::info("Found config file {}, parsing it now", configFile);
             config = toml::parse_file(configFile);
         }
         catch (const toml::parse_error &e)
@@ -234,6 +256,7 @@ namespace InfoWidgets::PluginHUD
             SKSE::log::error("LoadConfig: failed to parse '{}': {}", configFile, e.description());
             return;
         }
+        SKSE::log::info("Parse done, now changing the configuration");
         generalConfig.configure(config);
         for (auto *widget : widgets)
         {
