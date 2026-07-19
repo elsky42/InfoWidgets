@@ -44,20 +44,20 @@ namespace InfoWidgets::FlatRegenCache
             if (base->data.flags.any(RE::EffectSetting::EffectSettingData::Flag::kRecover))
                 continue;
 
-            auto accumulate = [&](RE::ActorValue av) {
+            auto accumulate = [&](RE::ActorValue av, float mag) {
                 switch (av)
                 {
-                case RE::ActorValue::kHealth:  _values.health  += effect->magnitude; break;
-                case RE::ActorValue::kMagicka: _values.magicka += effect->magnitude; break;
-                case RE::ActorValue::kStamina: _values.stamina += effect->magnitude; break;
+                case RE::ActorValue::kHealth:  _values.health  += mag; break;
+                case RE::ActorValue::kMagicka: _values.magicka += mag; break;
+                case RE::ActorValue::kStamina: _values.stamina += mag; break;
                 default: break;
                 }
             };
 
-            accumulate(base->data.primaryAV);
+            accumulate(base->data.primaryAV, effect->magnitude);
             const auto archetype = base->GetArchetype();
             if (archetype == RE::EffectArchetypes::ArchetypeID::kDualValueModifier)
-                accumulate(base->data.secondaryAV);
+                accumulate(base->data.secondaryAV, effect->magnitude * base->data.secondAVWeight);
         }
     }
 
