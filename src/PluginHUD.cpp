@@ -203,6 +203,9 @@ namespace InfoWidgets::PluginHUD
         if (!ui->IsMenuOpen(RE::HUDMenu::MENU_NAME))
             return false;
 
+        if (!ui->IsShowingMenus())
+            return false;
+
         if (SKSEMenuFramework::IsAnyBlockingWindowOpened())
             return true;
 
