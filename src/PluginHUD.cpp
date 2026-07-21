@@ -13,7 +13,9 @@
 #include "LightWidget.h"
 #include "HealthRegenWidget.h"
 #include "MagickaRegenWidget.h"
+#include "MovementSpeedWidget.h"
 #include "NoiseWidget.h"
+#include "ResistWidget.h"
 #include "StaminaRegenWidget.h"
 #include "ToxicityWidget.h"
 #include "VampireStageWidget.h"
@@ -79,6 +81,38 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(staminaRegenTextWidget);
     static StaminaRegenIconWidget staminaRegenIconWidget;
     WIDGET_RENDER_FUNCTION(staminaRegenIconWidget);
+    static MagicResistTextWidget magicResistTextWidget;
+    WIDGET_RENDER_FUNCTION(magicResistTextWidget);
+    static MagicResistIconWidget magicResistIconWidget;
+    WIDGET_RENDER_FUNCTION(magicResistIconWidget);
+    static FireResistTextWidget fireResistTextWidget;
+    WIDGET_RENDER_FUNCTION(fireResistTextWidget);
+    static FireResistIconWidget fireResistIconWidget;
+    WIDGET_RENDER_FUNCTION(fireResistIconWidget);
+    static FrostResistTextWidget frostResistTextWidget;
+    WIDGET_RENDER_FUNCTION(frostResistTextWidget);
+    static FrostResistIconWidget frostResistIconWidget;
+    WIDGET_RENDER_FUNCTION(frostResistIconWidget);
+    static ShockResistTextWidget shockResistTextWidget;
+    WIDGET_RENDER_FUNCTION(shockResistTextWidget);
+    static ShockResistIconWidget shockResistIconWidget;
+    WIDGET_RENDER_FUNCTION(shockResistIconWidget);
+    static PoisonResistTextWidget poisonResistTextWidget;
+    WIDGET_RENDER_FUNCTION(poisonResistTextWidget);
+    static PoisonResistIconWidget poisonResistIconWidget;
+    WIDGET_RENDER_FUNCTION(poisonResistIconWidget);
+    static DiseaseResistTextWidget diseaseResistTextWidget;
+    WIDGET_RENDER_FUNCTION(diseaseResistTextWidget);
+    static DiseaseResistIconWidget diseaseResistIconWidget;
+    WIDGET_RENDER_FUNCTION(diseaseResistIconWidget);
+    static ArmorRatingTextWidget armorRatingTextWidget;
+    WIDGET_RENDER_FUNCTION(armorRatingTextWidget);
+    static ArmorRatingIconWidget armorRatingIconWidget;
+    WIDGET_RENDER_FUNCTION(armorRatingIconWidget);
+    static MovementSpeedTextWidget movementSpeedTextWidget;
+    WIDGET_RENDER_FUNCTION(movementSpeedTextWidget);
+    static MovementSpeedIconWidget movementSpeedIconWidget;
+    WIDGET_RENDER_FUNCTION(movementSpeedIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -102,7 +136,23 @@ namespace InfoWidgets::PluginHUD
         &healthRegenTextWidget,
         &healthRegenIconWidget,
         &staminaRegenTextWidget,
-        &staminaRegenIconWidget};
+        &staminaRegenIconWidget,
+        &magicResistTextWidget,
+        &magicResistIconWidget,
+        &fireResistTextWidget,
+        &fireResistIconWidget,
+        &frostResistTextWidget,
+        &frostResistIconWidget,
+        &shockResistTextWidget,
+        &shockResistIconWidget,
+        &poisonResistTextWidget,
+        &poisonResistIconWidget,
+        &diseaseResistTextWidget,
+        &diseaseResistIconWidget,
+        &armorRatingTextWidget,
+        &armorRatingIconWidget,
+        &movementSpeedTextWidget,
+        &movementSpeedIconWidget};
 
     static void saveConfig()
     {
@@ -300,6 +350,22 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Health Regen Icon", renderhealthRegenIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Text", renderstaminaRegenTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Icon", renderstaminaRegenIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Magic Resist Text", rendermagicResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Magic Resist Icon", rendermagicResistIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Fire Resist Text", renderfireResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Fire Resist Icon", renderfireResistIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Frost Resist Text", renderfrostResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Frost Resist Icon", renderfrostResistIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Text", rendershockResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Icon", rendershockResistIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Poison Resist Text", renderpoisonResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Poison Resist Icon", renderpoisonResistIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Disease Resist Text", renderdiseaseResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Disease Resist Icon", renderdiseaseResistIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Armor Rating Text", renderarmorRatingTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Armor Rating Icon", renderarmorRatingIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Text", rendermovementSpeedTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Icon", rendermovementSpeedIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Save and Load Configuration", renderSaveLoadConfiguration);
         SKSEMenuFramework::AddSectionItem("About", renderAbout);
     }
