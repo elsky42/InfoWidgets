@@ -6,6 +6,7 @@
 
 #include "PCH.h"
 #include "AttackSpeedWidget.h"
+#include "CarryWeightWidget.h"
 #include "D3DRenderer.h"
 #include "FlatRegenCache.h"
 #include "FoodWidget.h"
@@ -113,6 +114,10 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(movementSpeedTextWidget);
     static MovementSpeedIconWidget movementSpeedIconWidget;
     WIDGET_RENDER_FUNCTION(movementSpeedIconWidget);
+    static CarryWeightTextWidget carryWeightTextWidget;
+    WIDGET_RENDER_FUNCTION(carryWeightTextWidget);
+    static CarryWeightIconWidget carryWeightIconWidget;
+    WIDGET_RENDER_FUNCTION(carryWeightIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -152,7 +157,9 @@ namespace InfoWidgets::PluginHUD
         &armorRatingTextWidget,
         &armorRatingIconWidget,
         &movementSpeedTextWidget,
-        &movementSpeedIconWidget};
+        &movementSpeedIconWidget,
+        &carryWeightTextWidget,
+        &carryWeightIconWidget};
 
     static void saveConfig()
     {
@@ -371,6 +378,8 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Armor Rating Icon", renderarmorRatingIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Text", rendermovementSpeedTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Icon", rendermovementSpeedIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Carry Weight Text", rendercarryWeightTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Carry Weight Icon", rendercarryWeightIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Save and Load Configuration", renderSaveLoadConfiguration);
         SKSEMenuFramework::AddSectionItem("About", renderAbout);
     }

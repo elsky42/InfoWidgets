@@ -20,7 +20,11 @@ namespace InfoWidgets
     void MagicResistTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistMagic));
     }
 
@@ -29,7 +33,11 @@ namespace InfoWidgets
     void MagicResistIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_HAT_WIZARD;
     }
 
@@ -40,7 +48,11 @@ namespace InfoWidgets
     void FireResistTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistFire));
     }
 
@@ -49,7 +61,11 @@ namespace InfoWidgets
     void FireResistIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_FIRE;
     }
 
@@ -60,7 +76,11 @@ namespace InfoWidgets
     void FrostResistTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistFrost));
     }
 
@@ -69,7 +89,11 @@ namespace InfoWidgets
     void FrostResistIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_SNOWFLAKE;
     }
 
@@ -80,7 +104,11 @@ namespace InfoWidgets
     void ShockResistTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistShock));
     }
 
@@ -89,7 +117,11 @@ namespace InfoWidgets
     void ShockResistIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_BOLT_LIGHTNING;
     }
 
@@ -100,7 +132,11 @@ namespace InfoWidgets
     void PoisonResistTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kPoisonResist));
     }
 
@@ -109,7 +145,11 @@ namespace InfoWidgets
     void PoisonResistIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_SKULL_CROSSBONES;
     }
 
@@ -120,7 +160,11 @@ namespace InfoWidgets
     void DiseaseResistTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistDisease));
     }
 
@@ -129,7 +173,11 @@ namespace InfoWidgets
     void DiseaseResistIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_VIRUS;
     }
 
@@ -140,7 +188,11 @@ namespace InfoWidgets
     void ArmorRatingTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kDamageResist));
     }
 
@@ -149,7 +201,11 @@ namespace InfoWidgets
     void ArmorRatingIconWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
+        if (!player)
+        {
+            _text = "";
+            return;
+        }
         _text = ICON_FA_SHIELD;
     }
 }
