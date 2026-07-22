@@ -277,6 +277,11 @@ namespace InfoWidgets::PluginHUD
 
     static void RenderHUD()
     {
+        for (auto *widget : widgets)
+        {
+            widget->renderConfigOverlay();
+        }
+
         if (!generalConfig.isHudVisible())
             return;
 

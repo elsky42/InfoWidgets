@@ -16,6 +16,8 @@ namespace InfoWidgets::D3DRenderer
 
     void AddText(float x, float y, float size, unsigned int color, ImFont *font, const char *text);
     void AddRectFilled(float x0, float y0, float x1, float y1, unsigned int color);
+    void AddCircleFilled(float x, float y, float radius, unsigned int color);
+    void AddLine(float x0, float y0, float x1, float y1, unsigned int color, float thickness = 1.0f);
 
     ImFont *TextFont();
     ImFont *IconFont();

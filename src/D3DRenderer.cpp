@@ -253,6 +253,22 @@ namespace InfoWidgets::D3DRenderer
         dl->AddRectFilled(ImVec2(x0, y0), ImVec2(x1, y1), color);
     }
 
+    void AddCircleFilled(float x, float y, float radius, unsigned int color)
+    {
+        if (!g_imguiContext)
+            return;
+        ImDrawList *dl = ImGui::GetForegroundDrawList();
+        dl->AddCircleFilled(ImVec2(x, y), radius, color);
+    }
+
+    void AddLine(float x0, float y0, float x1, float y1, unsigned int color, float thickness)
+    {
+        if (!g_imguiContext)
+            return;
+        ImDrawList *dl = ImGui::GetForegroundDrawList();
+        dl->AddLine(ImVec2(x0, y0), ImVec2(x1, y1), color, thickness);
+    }
+
     void AddText(float x, float y, float size, unsigned int color, ImFont *font, const char *text)
     {
         if (!g_imguiContext || !text || !*text)

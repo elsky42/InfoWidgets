@@ -4,6 +4,7 @@
 
 #include <PCH.h>
 #include "ColorConfig.h"
+#include "D3DRenderer.h"
 #include "DrawUtils.h"
 
 
@@ -17,6 +18,7 @@ namespace InfoWidgets
         virtual std::string widgetConfigName() = 0;
         virtual void saveConfig(toml::table &root) = 0;
         virtual void updateAndRender(float deltaTime) = 0;
+        virtual void renderConfigOverlay() {}
         virtual void disable() {}
     };
 
@@ -69,6 +71,13 @@ namespace InfoWidgets
     class RectMixin
     {
     public:
+        enum class HorizontalAlignment
+        {
+            Left,
+            Center,
+            Right
+        };
+
         void configure(const toml::table &root, const std::string &section)
         {
             if (root.empty())
@@ -77,6 +86,8 @@ namespace InfoWidgets
             auto y = root.at_path(section + ".position.y").value_or(0.0f);
             _position = ImGuiMCP::ImVec2(x, y);
             _size = root.at_path(section + ".size").value_or(0.01f);
+            auto alignment = root.at_path(section + ".horizontalAlignment").value_or(std::string{"left"});
+            _horizontalAlignment = horizontalAlignmentFromString(alignment);
         }
 
         void saveConfig(toml::table &root, const std::string &section)
@@ -90,12 +101,52 @@ namespace InfoWidgets
             pos.insert_or_assign("x", _position.x);
             pos.insert_or_assign("y", _position.y);
             sec.insert_or_assign("size", _size);
+            sec.insert_or_assign("horizontalAlignment", horizontalAlignmentToString(_horizontalAlignment));
         }
 
         bool renderConfig()
         {
-            return ImGuiMCP::ImGui::DragFloat2("Position", &_position.x, 0.001f, 0.0f, 1.0f, "%.5f") ||
-                   ImGuiMCP::ImGui::DragFloat("Size", &_size, 0.001f, 0.0f, 1.0f, "%.5f");
+            _configActive = true;
+
+            bool changed = ImGuiMCP::ImGui::DragFloat2("Position", &_position.x, 0.001f, 0.0f, 1.0f, "%.5f");
+            changed |= ImGuiMCP::ImGui::DragFloat("Size", &_size, 0.001f, 0.0f, 1.0f, "%.5f");
+
+            int alignmentIndex = static_cast<int>(_horizontalAlignment);
+            if (ImGuiMCP::ImGui::Combo("Horizontal Alignment", &alignmentIndex, "Left\0Center\0Right\0\0"))
+            {
+                _horizontalAlignment = static_cast<HorizontalAlignment>(alignmentIndex);
+                changed = true;
+            }
+
+            return changed;
+        }
+
+        void renderConfigOverlay()
+        {
+            if (!_configActive)
+                return;
+            _configActive = false;
+
+            auto pos = normalizedPosition();
+            float tickLength = normalizedSize();
+            if (tickLength < 12.0f)
+                tickLength = 12.0f;
+
+            constexpr unsigned int markerColor = IM_COL32(255, 255, 0, 255);
+            D3DRenderer::AddCircleFilled(pos.x, pos.y, 4.0f, markerColor);
+
+            switch (_horizontalAlignment)
+            {
+            case HorizontalAlignment::Left:
+                D3DRenderer::AddLine(pos.x, pos.y, pos.x + tickLength, pos.y, markerColor, 2.0f);
+                break;
+            case HorizontalAlignment::Right:
+                D3DRenderer::AddLine(pos.x, pos.y, pos.x - tickLength, pos.y, markerColor, 2.0f);
+                break;
+            case HorizontalAlignment::Center:
+                D3DRenderer::AddLine(pos.x - tickLength / 2.0f, pos.y, pos.x + tickLength / 2.0f, pos.y, markerColor, 2.0f);
+                break;
+            }
         }
 
         ImGuiMCP::ImVec2 normalizedPosition() const
@@ -110,9 +161,52 @@ namespace InfoWidgets
 
         float normalizedSize() const { return DrawUtils::normalizeY(_size); }
 
+        HorizontalAlignment horizontalAlignment() const { return _horizontalAlignment; }
+
+        float applyHorizontalAlignment(float anchorX, float textWidth) const
+        {
+            switch (_horizontalAlignment)
+            {
+            case HorizontalAlignment::Center:
+                return anchorX - textWidth / 2.0f;
+            case HorizontalAlignment::Right:
+                return anchorX - textWidth;
+            case HorizontalAlignment::Left:
+            default:
+                return anchorX;
+            }
+        }
+
     protected:
         ImGuiMCP::ImVec2 _position{0.1f, 0.1f};
         float _size{0.1f};
+        HorizontalAlignment _horizontalAlignment{HorizontalAlignment::Left};
+
+    private:
+        bool _configActive{false};
+
+        static HorizontalAlignment horizontalAlignmentFromString(const std::string &s)
+        {
+            if (s == "center")
+                return HorizontalAlignment::Center;
+            if (s == "right")
+                return HorizontalAlignment::Right;
+            return HorizontalAlignment::Left;
+        }
+
+        static std::string horizontalAlignmentToString(HorizontalAlignment a)
+        {
+            switch (a)
+            {
+            case HorizontalAlignment::Center:
+                return "center";
+            case HorizontalAlignment::Right:
+                return "right";
+            case HorizontalAlignment::Left:
+            default:
+                return "left";
+            }
+        }
     };
 
     class ColoredMixin

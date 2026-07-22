@@ -1,5 +1,7 @@
 #include "BaseTextWidget.h"
 
+#include <cfloat>
+
 namespace InfoWidgets
 {
     void BaseTextWidget::updateAndRender(float deltaTime)
@@ -27,6 +29,12 @@ namespace InfoWidgets
 
         auto pos = normalizedPosition();
         float size = normalizedSize();
+
+        if (_horizontalAlignment != HorizontalAlignment::Left && !_text.empty())
+        {
+            float textWidth = f->CalcTextSizeA(size, FLT_MAX, 0.0f, _text.c_str()).x;
+            pos.x = applyHorizontalAlignment(pos.x, textWidth);
+        }
 
         if (_outlineColor.w > 0.0f && _outlineSize > 0)
         {

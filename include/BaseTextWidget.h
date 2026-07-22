@@ -43,6 +43,7 @@ namespace InfoWidgets
         }
 
         void updateAndRender(float deltaTime) override final;
+        void renderConfigOverlay() override { RectMixin::renderConfigOverlay(); }
 
     protected:
         virtual void update() = 0;
