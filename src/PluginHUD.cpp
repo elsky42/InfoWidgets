@@ -17,6 +17,7 @@
 #include "MovementSpeedWidget.h"
 #include "NoiseWidget.h"
 #include "ResistWidget.h"
+#include "SeptimWidget.h"
 #include "StaminaRegenWidget.h"
 #include "ToxicityWidget.h"
 #include "VampireStageWidget.h"
@@ -118,6 +119,10 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(carryWeightTextWidget);
     static CarryWeightIconWidget carryWeightIconWidget;
     WIDGET_RENDER_FUNCTION(carryWeightIconWidget);
+    static SeptimTextWidget septimTextWidget;
+    WIDGET_RENDER_FUNCTION(septimTextWidget);
+    static SeptimIconWidget septimIconWidget;
+    WIDGET_RENDER_FUNCTION(septimIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -159,7 +164,9 @@ namespace InfoWidgets::PluginHUD
         &movementSpeedTextWidget,
         &movementSpeedIconWidget,
         &carryWeightTextWidget,
-        &carryWeightIconWidget};
+        &carryWeightIconWidget,
+        &septimTextWidget,
+        &septimIconWidget};
 
     static void saveConfig()
     {
@@ -371,6 +378,8 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Off Hand Attack Speed Text", renderoffHandAttackSpeedTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Poison Resist Icon", renderpoisonResistIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Poison Resist Text", renderpoisonResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Septim Icon", renderseptimIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Septim Text", renderseptimTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Icon", rendershockResistIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Text", rendershockResistTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Snack Text", rendersnackTextWidgetSettings);
