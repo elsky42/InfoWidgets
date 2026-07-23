@@ -173,6 +173,10 @@ namespace InfoWidgets::D3DRenderer
                 return;
         }
 
+        auto *ui = RE::UI::GetSingleton();
+        if (ui && ui->IsMenuOpen(RE::MainMenu::MENU_NAME))
+            return;
+
         auto *rd = RE::BSGraphics::Renderer::GetRendererData();
         if (!rd)
             return;
