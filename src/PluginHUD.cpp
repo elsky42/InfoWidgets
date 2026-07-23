@@ -306,6 +306,8 @@ namespace InfoWidgets::PluginHUD
         if (maxWidgetSize <= 0.0f)
             return;
 
+        maxWidgetSize = std::clamp(maxWidgetSize, 8.0f, 64.0f);
+
         if (std::fabs(maxWidgetSize - s_lastSeenSize) > 0.5f)
         {
             s_lastSeenSize = maxWidgetSize;
