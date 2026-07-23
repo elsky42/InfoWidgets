@@ -20,6 +20,7 @@
 #include "NoiseWidget.h"
 #include "ResistWidget.h"
 #include "SeptimWidget.h"
+#include "SpellPowerWidget.h"
 #include "StaminaRegenWidget.h"
 #include "ToxicityWidget.h"
 #include "VampireStageWidget.h"
@@ -125,6 +126,10 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(septimTextWidget);
     static SeptimIconWidget septimIconWidget;
     WIDGET_RENDER_FUNCTION(septimIconWidget);
+    static SpellPowerTextWidget spellPowerTextWidget;
+    WIDGET_RENDER_FUNCTION(spellPowerTextWidget);
+    static SpellPowerIconWidget spellPowerIconWidget;
+    WIDGET_RENDER_FUNCTION(spellPowerIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -168,7 +173,9 @@ namespace InfoWidgets::PluginHUD
         &carryWeightTextWidget,
         &carryWeightIconWidget,
         &septimTextWidget,
-        &septimIconWidget};
+        &septimIconWidget,
+        &spellPowerTextWidget,
+        &spellPowerIconWidget};
 
     static void saveConfig()
     {
@@ -412,6 +419,8 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Icon", rendershockResistIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Text", rendershockResistTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Snack Text", rendersnackTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Spell Power Icon", renderspellPowerIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Spell Power Text", renderspellPowerTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Icon", renderstaminaRegenIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Text", renderstaminaRegenTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Toxicity Icon", rendertoxicityIconWidgetSettings);
