@@ -311,6 +311,8 @@ namespace InfoWidgets::D3DRenderer
 
     void SetTextFontSize(float size)
     {
+        if (size == g_textFontSize)
+            return;
         g_textFontSize = size;
         if (g_initialized) g_fontReloadPending = true;
     }

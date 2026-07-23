@@ -88,9 +88,7 @@ namespace InfoWidgets
             return;
         _toggleKey.store(root.at_path("General.toggleKey").value_or(0u));
         _textFontPath = root.at_path("General.textFont").value_or(std::string{});
-        _textFontSize = root.at_path("General.fontSize").value_or(20.0f);
         D3DRenderer::SetTextFontPath(_textFontPath);
-        D3DRenderer::SetTextFontSize(_textFontSize);
     }
 
     void GeneralConfig::saveConfig(toml::table &root)
@@ -101,7 +99,6 @@ namespace InfoWidgets
         auto &sec = *root.get_as<toml::table>(s);
         sec.insert_or_assign("toggleKey", _toggleKey.load());
         sec.insert_or_assign("textFont", _textFontPath);
-        sec.insert_or_assign("fontSize", _textFontSize);
     }
 
     bool GeneralConfig::renderConfig(toml::table & /*root*/)
@@ -178,12 +175,6 @@ namespace InfoWidgets
                 if (isSel) ImGuiMCP::ImGui::SetItemDefaultFocus();
             }
             ImGuiMCP::ImGui::EndCombo();
-        }
-
-        if (ImGuiMCP::ImGui::DragFloat("Font Size", &_textFontSize, 0.5f, 8.0f, 64.0f, "%.0f"))
-        {
-            D3DRenderer::SetTextFontSize(_textFontSize);
-            changed = true;
         }
 
         return changed;

@@ -1,6 +1,8 @@
 #include "PluginHUD.h"
 
+#include <algorithm>
 #include <cerrno>
+#include <cmath>
 #include <cstring>
 #include <filesystem>
 
@@ -289,12 +291,40 @@ namespace InfoWidgets::PluginHUD
                !ui->IsMenuOpen(RE::DialogueMenu::MENU_NAME);
     }
 
+    static void UpdateAutoFontSize(float maxWidgetSize, float deltaTime)
+    {
+        static float s_lastSeenSize = 0.0f;
+        static float s_stableTime = 0.0f;
+
+        if (maxWidgetSize <= 0.0f)
+            return;
+
+        if (std::fabs(maxWidgetSize - s_lastSeenSize) > 0.5f)
+        {
+            s_lastSeenSize = maxWidgetSize;
+            s_stableTime = 0.0f;
+            return;
+        }
+
+        constexpr float debounceSeconds = 0.3f;
+        s_stableTime += deltaTime;
+        if (s_stableTime >= debounceSeconds)
+        {
+            D3DRenderer::SetTextFontSize(maxWidgetSize);
+        }
+    }
+
     static void RenderHUD()
     {
+        const float deltaTime = D3DRenderer::GetDeltaTime();
+
+        float maxWidgetSize = 0.0f;
         for (auto *widget : widgets)
         {
             widget->renderConfigOverlay();
+            maxWidgetSize = std::max(maxWidgetSize, widget->widgetSize());
         }
+        UpdateAutoFontSize(maxWidgetSize, deltaTime);
 
         if (!generalConfig.isHudVisible())
             return;
@@ -302,7 +332,6 @@ namespace InfoWidgets::PluginHUD
         if (!ShouldDisplay())
             return;
 
-        const float deltaTime = D3DRenderer::GetDeltaTime();
         FlatRegenCache::tick(deltaTime);
         for (auto *widget : widgets)
         {

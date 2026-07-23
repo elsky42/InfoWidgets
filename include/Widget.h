@@ -19,6 +19,7 @@ namespace InfoWidgets
         virtual void saveConfig(toml::table &root) = 0;
         virtual void updateAndRender(float deltaTime) = 0;
         virtual void renderConfigOverlay() {}
+        virtual float widgetSize() const { return 0.0f; }
         virtual void disable() {}
     };
 

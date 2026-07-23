@@ -44,6 +44,7 @@ namespace InfoWidgets
 
         void updateAndRender(float deltaTime) override final;
         void renderConfigOverlay() override { RectMixin::renderConfigOverlay(); }
+        float widgetSize() const override { return normalizedSize(); }
 
     protected:
         virtual void update() = 0;

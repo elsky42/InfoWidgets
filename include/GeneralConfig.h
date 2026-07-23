@@ -20,7 +20,6 @@ namespace InfoWidgets
         std::atomic<uint32_t> _toggleKey{0}; // stores ImGuiMCP::ImGuiKey
         std::atomic<bool>     _capturingKey{false};
         std::string           _textFontPath;
-        float                 _textFontSize{20.0f};
 
         class Sink : public RE::BSTEventSink<RE::InputEvent *>
         {
