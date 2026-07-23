@@ -15,8 +15,8 @@ namespace InfoWidgets
     class MagicResistIconWidget final : public IconWidget
     {
     public:
+        MagicResistIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 
     class FireResistTextWidget final : public TextWidget
@@ -29,8 +29,8 @@ namespace InfoWidgets
     class FireResistIconWidget final : public IconWidget
     {
     public:
+        FireResistIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 
     class FrostResistTextWidget final : public TextWidget
@@ -43,8 +43,8 @@ namespace InfoWidgets
     class FrostResistIconWidget final : public IconWidget
     {
     public:
+        FrostResistIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 
     class ShockResistTextWidget final : public TextWidget
@@ -57,8 +57,8 @@ namespace InfoWidgets
     class ShockResistIconWidget final : public IconWidget
     {
     public:
+        ShockResistIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 
     class PoisonResistTextWidget final : public TextWidget
@@ -71,8 +71,8 @@ namespace InfoWidgets
     class PoisonResistIconWidget final : public IconWidget
     {
     public:
+        PoisonResistIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 
     class DiseaseResistTextWidget final : public TextWidget
@@ -85,8 +85,8 @@ namespace InfoWidgets
     class DiseaseResistIconWidget final : public IconWidget
     {
     public:
+        DiseaseResistIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 
     class ArmorRatingTextWidget final : public TextWidget
@@ -99,7 +99,7 @@ namespace InfoWidgets
     class ArmorRatingIconWidget final : public IconWidget
     {
     public:
+        ArmorRatingIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

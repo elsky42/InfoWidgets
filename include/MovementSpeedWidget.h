@@ -15,7 +15,7 @@ namespace InfoWidgets
     class MovementSpeedIconWidget final : public IconWidget
     {
     public:
+        MovementSpeedIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

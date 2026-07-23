@@ -15,12 +15,10 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", speed);
     }
 
-    std::string MovementSpeedIconWidget::widgetConfigName() { return "MovementSpeedIconWidget"; }
-
-    void MovementSpeedIconWidget::update()
+    MovementSpeedIconWidget::MovementSpeedIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
-        _text = ICON_FA_SHOE_PRINTS;
+        _icon = _defaultIcon = ICON_FA_SHOE_PRINTS;
     }
+
+    std::string MovementSpeedIconWidget::widgetConfigName() { return "MovementSpeedIconWidget"; }
 }

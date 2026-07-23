@@ -14,12 +14,10 @@ namespace InfoWidgets
         _text = std::format("{}", player->GetGoldAmount());
     }
 
-    std::string SeptimIconWidget::widgetConfigName() { return "SeptimIconWidget"; }
-
-    void SeptimIconWidget::update()
+    SeptimIconWidget::SeptimIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player) { _text = ""; return; }
-        _text = ICON_FA_COINS;
+        _icon = _defaultIcon = ICON_FA_COINS;
     }
+
+    std::string SeptimIconWidget::widgetConfigName() { return "SeptimIconWidget"; }
 }

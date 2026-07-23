@@ -23,6 +23,5 @@ namespace InfoWidgets
     public:
         VampireStageIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

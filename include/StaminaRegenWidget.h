@@ -15,7 +15,7 @@ namespace InfoWidgets
     class StaminaRegenIconWidget final : public IconWidget
     {
     public:
+        StaminaRegenIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

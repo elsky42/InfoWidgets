@@ -74,6 +74,5 @@ namespace InfoWidgets
     public:
         FoodIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

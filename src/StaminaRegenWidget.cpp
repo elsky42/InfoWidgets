@@ -25,16 +25,10 @@ namespace InfoWidgets
         _text = std::format("{:.1f}/s", regenPerSecond);
     }
 
-    std::string StaminaRegenIconWidget::widgetConfigName() { return "StaminaRegenIconWidget"; }
-
-    void StaminaRegenIconWidget::update()
+    StaminaRegenIconWidget::StaminaRegenIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_LUNGS;
+        _icon = _defaultIcon = ICON_FA_LUNGS;
     }
+
+    std::string StaminaRegenIconWidget::widgetConfigName() { return "StaminaRegenIconWidget"; }
 }

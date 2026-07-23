@@ -15,7 +15,7 @@ namespace InfoWidgets
     class SeptimIconWidget final : public IconWidget
     {
     public:
+        SeptimIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

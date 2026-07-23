@@ -58,6 +58,42 @@ namespace InfoWidgets
     {
     public:
         ImFont *font() override { return D3DRenderer::IconFont(); }
+
+        void configure(const toml::table &root) override
+        {
+            BaseTextWidget::configure(root);
+            if (!hasConfigurableIcon())
+                return;
+            if (!root.empty())
+                _icon = root.at_path(widgetConfigName() + ".icon").value_or(_icon);
+            _text = _icon;
+        }
+
+        void saveConfig(toml::table &root) override
+        {
+            BaseTextWidget::saveConfig(root);
+            if (hasConfigurableIcon())
+                root.get_as<toml::table>(widgetConfigName())->insert_or_assign("icon", _icon);
+        }
+
+        bool renderConfig(toml::table &root) override
+        {
+            bool changed = BaseTextWidget::renderConfig(root);
+            if (hasConfigurableIcon())
+                changed |= renderIconPicker();
+            return changed;
+        }
+
+        void update() override { _text = _icon; }
+
+    protected:
+        virtual bool hasConfigurableIcon() const { return true; }
+        std::string _icon;
+        std::string _defaultIcon;
+
+    private:
+        char _iconFilter[64]{};
+        bool renderIconPicker();
     };
 
     class TextWidget : public BaseTextWidget

@@ -15,7 +15,7 @@ namespace InfoWidgets
     class HealthRegenIconWidget final : public IconWidget
     {
     public:
+        HealthRegenIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

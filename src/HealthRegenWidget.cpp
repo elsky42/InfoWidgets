@@ -25,16 +25,10 @@ namespace InfoWidgets
         _text = std::format("{:.1f}/s", regenPerSecond);
     }
 
-    std::string HealthRegenIconWidget::widgetConfigName() { return "HealthRegenIconWidget"; }
-
-    void HealthRegenIconWidget::update()
+    HealthRegenIconWidget::HealthRegenIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_HEART;
+        _icon = _defaultIcon = ICON_FA_HEART;
     }
+
+    std::string HealthRegenIconWidget::widgetConfigName() { return "HealthRegenIconWidget"; }
 }

@@ -46,13 +46,11 @@ namespace InfoWidgets
 
     VampireStageIconWidget::VampireStageIconWidget()
     {
-        _text = ICON_FA_DROPLET;
+        _icon = _defaultIcon = ICON_FA_DROPLET;
     }
 
     std::string VampireStageIconWidget::widgetConfigName()
     {
         return "VampireStageIconWidget";
     }
-
-    void VampireStageIconWidget::update() {}
 }

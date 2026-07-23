@@ -28,18 +28,12 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistMagic));
     }
 
-    std::string MagicResistIconWidget::widgetConfigName() { return "MagicResistIconWidget"; }
-
-    void MagicResistIconWidget::update()
+    MagicResistIconWidget::MagicResistIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_HAT_WIZARD;
+        _icon = _defaultIcon = ICON_FA_HAT_WIZARD;
     }
+
+    std::string MagicResistIconWidget::widgetConfigName() { return "MagicResistIconWidget"; }
 
     // --- Fire Resist ---
 
@@ -56,18 +50,12 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistFire));
     }
 
-    std::string FireResistIconWidget::widgetConfigName() { return "FireResistIconWidget"; }
-
-    void FireResistIconWidget::update()
+    FireResistIconWidget::FireResistIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_FIRE;
+        _icon = _defaultIcon = ICON_FA_FIRE;
     }
+
+    std::string FireResistIconWidget::widgetConfigName() { return "FireResistIconWidget"; }
 
     // --- Frost Resist ---
 
@@ -84,18 +72,12 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistFrost));
     }
 
-    std::string FrostResistIconWidget::widgetConfigName() { return "FrostResistIconWidget"; }
-
-    void FrostResistIconWidget::update()
+    FrostResistIconWidget::FrostResistIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_SNOWFLAKE;
+        _icon = _defaultIcon = ICON_FA_SNOWFLAKE;
     }
+
+    std::string FrostResistIconWidget::widgetConfigName() { return "FrostResistIconWidget"; }
 
     // --- Shock Resist ---
 
@@ -112,18 +94,12 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistShock));
     }
 
-    std::string ShockResistIconWidget::widgetConfigName() { return "ShockResistIconWidget"; }
-
-    void ShockResistIconWidget::update()
+    ShockResistIconWidget::ShockResistIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_BOLT_LIGHTNING;
+        _icon = _defaultIcon = ICON_FA_BOLT_LIGHTNING;
     }
+
+    std::string ShockResistIconWidget::widgetConfigName() { return "ShockResistIconWidget"; }
 
     // --- Poison Resist ---
 
@@ -140,18 +116,12 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kPoisonResist));
     }
 
-    std::string PoisonResistIconWidget::widgetConfigName() { return "PoisonResistIconWidget"; }
-
-    void PoisonResistIconWidget::update()
+    PoisonResistIconWidget::PoisonResistIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_SKULL_CROSSBONES;
+        _icon = _defaultIcon = ICON_FA_SKULL_CROSSBONES;
     }
+
+    std::string PoisonResistIconWidget::widgetConfigName() { return "PoisonResistIconWidget"; }
 
     // --- Disease Resist ---
 
@@ -168,18 +138,12 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kResistDisease));
     }
 
-    std::string DiseaseResistIconWidget::widgetConfigName() { return "DiseaseResistIconWidget"; }
-
-    void DiseaseResistIconWidget::update()
+    DiseaseResistIconWidget::DiseaseResistIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_VIRUS;
+        _icon = _defaultIcon = ICON_FA_VIRUS;
     }
+
+    std::string DiseaseResistIconWidget::widgetConfigName() { return "DiseaseResistIconWidget"; }
 
     // --- Armor Rating ---
 
@@ -196,16 +160,10 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", GetResist(RE::ActorValue::kDamageResist));
     }
 
-    std::string ArmorRatingIconWidget::widgetConfigName() { return "ArmorRatingIconWidget"; }
-
-    void ArmorRatingIconWidget::update()
+    ArmorRatingIconWidget::ArmorRatingIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_SHIELD;
+        _icon = _defaultIcon = ICON_FA_SHIELD;
     }
+
+    std::string ArmorRatingIconWidget::widgetConfigName() { return "ArmorRatingIconWidget"; }
 }

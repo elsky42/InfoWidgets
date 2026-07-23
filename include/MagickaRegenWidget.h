@@ -15,7 +15,7 @@ namespace InfoWidgets
     class MagickaRegenIconWidget final : public IconWidget
     {
     public:
+        MagickaRegenIconWidget();
         std::string widgetConfigName() override;
-        void update() override;
     };
 }

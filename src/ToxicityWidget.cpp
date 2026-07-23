@@ -113,7 +113,7 @@ namespace InfoWidgets
 
     ToxicityIconWidget::ToxicityIconWidget()
     {
-        _text = ICON_FA_BOTTLE_DROPLET;
+        _icon = _defaultIcon = ICON_FA_BOTTLE_DROPLET;
     }
 
     std::string ToxicityIconWidget::widgetConfigName() { return "ToxicityIconWidget"; }

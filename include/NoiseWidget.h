@@ -17,5 +17,8 @@ namespace InfoWidgets
     public:
         std::string widgetConfigName() override;
         void update() override;
+
+    protected:
+        bool hasConfigurableIcon() const override { return false; }
     };
 }

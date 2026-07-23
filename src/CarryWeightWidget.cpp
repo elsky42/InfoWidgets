@@ -79,7 +79,7 @@ namespace InfoWidgets
 
     CarryWeightIconWidget::CarryWeightIconWidget()
     {
-        _text = ICON_FA_WEIGHT_HANGING;
+        _icon = _defaultIcon = ICON_FA_WEIGHT_HANGING;
     }
 
     std::string CarryWeightIconWidget::widgetConfigName() { return "CarryWeightIconWidget"; }

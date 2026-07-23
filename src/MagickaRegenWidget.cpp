@@ -25,16 +25,10 @@ namespace InfoWidgets
         _text = std::format("{:.1f}/s", regenPerSecond);
     }
 
-    std::string MagickaRegenIconWidget::widgetConfigName() { return "MagickaRegenIconWidget"; }
-
-    void MagickaRegenIconWidget::update()
+    MagickaRegenIconWidget::MagickaRegenIconWidget()
     {
-        auto *player = RE::PlayerCharacter::GetSingleton();
-        if (!player)
-        {
-            _text = "";
-            return;
-        }
-        _text = ICON_FA_WATER;
+        _icon = _defaultIcon = ICON_FA_WATER;
     }
+
+    std::string MagickaRegenIconWidget::widgetConfigName() { return "MagickaRegenIconWidget"; }
 }

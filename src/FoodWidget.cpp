@@ -140,8 +140,7 @@ namespace InfoWidgets
 
     FoodIconWidget::FoodIconWidget()
     {
-        _text = ICON_FA_BOWL_FOOD;
+        _icon = _defaultIcon = ICON_FA_BOWL_FOOD;
     }
     std::string FoodIconWidget::widgetConfigName() { return "FoodIconWidget"; }
-    void FoodIconWidget::update() {}
 }
