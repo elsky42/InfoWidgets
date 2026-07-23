@@ -72,7 +72,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     /permissive-
     /Zc:preprocessor
     /utf-8
+    $<$<CONFIG:RelWithDebInfo>:/Zi>
 )
+
+target_link_options(${PROJECT_NAME} PRIVATE $<$<CONFIG:RelWithDebInfo>:/DEBUG>)
 
 set(FA_FONT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/fonts")
 set(FA_FONTS_DEST "${CMAKE_BINARY_DIR}/InfoWidgets/SKSE/Plugins/InfoWidgets/Fonts")
@@ -86,6 +89,9 @@ add_custom_command(
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/InfoWidgets/SKSE/Plugins"
     COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PROJECT_NAME}>" "${CMAKE_BINARY_DIR}/InfoWidgets/SKSE/Plugins"
+    COMMAND $<$<CONFIG:RelWithDebInfo>:${CMAKE_COMMAND}> $<$<CONFIG:RelWithDebInfo>:-E>
+            $<$<CONFIG:RelWithDebInfo>:copy> $<$<CONFIG:RelWithDebInfo>:$<TARGET_PDB_FILE:${PROJECT_NAME}>>
+            $<$<CONFIG:RelWithDebInfo>:${CMAKE_BINARY_DIR}/InfoWidgets/SKSE/Plugins>
     ${FONT_COPY_COMMANDS}
     COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_BINARY_DIR}/InfoWidgets"
             ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/InfoWidget-${PROJECT_VERSION}.zip" --format=zip
