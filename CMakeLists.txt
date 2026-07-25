@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
     InfoWidgets
-    VERSION 0.0.11
+    VERSION 0.0.12
     LANGUAGES CXX
 )
 
