@@ -295,7 +295,8 @@ namespace InfoWidgets::PluginHUD
                !ui->IsMenuOpen(RE::JournalMenu::MENU_NAME) &&
                !ui->IsMenuOpen(RE::LoadingMenu::MENU_NAME) &&
                !ui->IsMenuOpen(RE::FaderMenu::MENU_NAME) &&
-               !ui->IsMenuOpen(RE::DialogueMenu::MENU_NAME);
+               !ui->IsMenuOpen(RE::DialogueMenu::MENU_NAME) &&
+               !ui->IsMenuOpen(RE::LockpickingMenu::MENU_NAME);
     }
 
     static void UpdateAutoFontSize(float maxWidgetSize, float deltaTime)
