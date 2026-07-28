@@ -4,11 +4,19 @@
 
 namespace InfoWidgets
 {
-    class VampireStageTextWidget : public TextWidget
+    enum class VampireStage
     {
-    public:
-        std::string widgetConfigName() override;
-        void update() override;
+        NotAVampire,
+        Stage1,
+        Stage2,
+        Stage3,
+        Stage4
+    };
+
+    class VampireStageMixin
+    {
+    protected:
+        VampireStage vampireStage();
 
     private:
         RE::SpellItem *_abVampire01 = nullptr;
@@ -18,10 +26,18 @@ namespace InfoWidgets
         bool _unavailable{false};
     };
 
-    class VampireStageIconWidget : public IconWidget
+    class VampireStageTextWidget : public TextWidget, public VampireStageMixin
+    {
+    public:
+        std::string widgetConfigName() override;
+        void update() override;
+    };
+
+    class VampireStageIconWidget : public IconWidget, public VampireStageMixin
     {
     public:
         VampireStageIconWidget();
         std::string widgetConfigName() override;
+        void update() override;
     };
 }

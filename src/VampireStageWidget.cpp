@@ -6,12 +6,10 @@ using namespace ImGuiMCP;
 
 namespace InfoWidgets
 {
-    std::string VampireStageTextWidget::widgetConfigName() { return "VampireStageTextWidget"; }
-
-    void VampireStageTextWidget::update()
+    VampireStage VampireStageMixin::vampireStage()
     {
         if (_unavailable)
-            return;
+            return VampireStage::NotAVampire;
 
         if (_abVampire01 == nullptr)
         {
@@ -22,26 +20,35 @@ namespace InfoWidgets
             _abVampire04 = handler->LookupForm<RE::SpellItem>(0x0ED09E, "Skyrim.esm");
             if (!_abVampire01 || !_abVampire02 || !_abVampire03 || !_abVampire04)
             {
-                SKSE::log::error("VampireStageTextWidget: failed to look up vampire spell forms from Skyrim.esm");
+                SKSE::log::error("VampireStageMixin: failed to look up vampire spell forms from Skyrim.esm");
                 _unavailable = true;
-                return;
+                return VampireStage::NotAVampire;
             }
         }
 
         auto *player = RE::PlayerCharacter::GetSingleton();
         if (!player)
-            return;
+            return VampireStage::NotAVampire;
 
         if (player->HasSpell(_abVampire04))
-            _text = "4";
-        else if (player->HasSpell(_abVampire03))
-            _text = "3";
-        else if (player->HasSpell(_abVampire02))
-            _text = "2";
-        else if (player->HasSpell(_abVampire01))
-            _text = "1";
-        else
-            _text = "";
+            return VampireStage::Stage4;
+        if (player->HasSpell(_abVampire03))
+            return VampireStage::Stage3;
+        if (player->HasSpell(_abVampire02))
+            return VampireStage::Stage2;
+        if (player->HasSpell(_abVampire01))
+            return VampireStage::Stage1;
+        return VampireStage::NotAVampire;
+    }
+
+    std::string VampireStageTextWidget::widgetConfigName() { return "VampireStageTextWidget"; }
+
+    void VampireStageTextWidget::update()
+    {
+        auto stage = vampireStage();
+        _text = stage != VampireStage::NotAVampire
+                    ? std::to_string(static_cast<int>(stage))
+                    : "";
     }
 
     VampireStageIconWidget::VampireStageIconWidget()
@@ -52,5 +59,10 @@ namespace InfoWidgets
     std::string VampireStageIconWidget::widgetConfigName()
     {
         return "VampireStageIconWidget";
+    }
+
+    void VampireStageIconWidget::update()
+    {
+        _text = vampireStage() != VampireStage::NotAVampire ? _icon : "";
     }
 }
