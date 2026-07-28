@@ -14,6 +14,11 @@ namespace InfoWidgets
         void saveToxicityColors(toml::table &root, const std::string &section);
         bool renderToxicityColors();
 
+        bool hideWhenZero() const { return _hideWhenZero; }
+        void configureHideWhenZero(const toml::table &root, const std::string &section);
+        void saveHideWhenZero(toml::table &root, const std::string &section);
+        bool renderHideWhenZero();
+
         ImGuiMCP::ImVec4 _warningColor{1.0f, 0.85f, 0.0f, 1.0f};
         ImGuiMCP::ImVec4 _dangerColor{0.9f, 0.1f, 0.1f, 1.0f};
         ImGuiMCP::ImVec4 _overdoseColor{0.6f, 0.0f, 0.9f, 1.0f};
@@ -21,6 +26,7 @@ namespace InfoWidgets
     private:
         RE::TESGlobal *_toxicitySlotsAvailable{nullptr};
         bool _unavailable{false};
+        bool _hideWhenZero{false};
     };
 
     class ToxicityTextWidget : public TextWidget, public ToxicityColorMixin

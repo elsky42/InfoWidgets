@@ -76,31 +76,49 @@ namespace InfoWidgets
         return changed;
     }
 
+    void ToxicityColorMixin::configureHideWhenZero(const toml::table &root, const std::string &section)
+    {
+        _hideWhenZero = root.at_path(section + ".hideWhenZero").value_or(_hideWhenZero);
+    }
+
+    void ToxicityColorMixin::saveHideWhenZero(toml::table &root, const std::string &section)
+    {
+        root.get_as<toml::table>(section)->insert_or_assign("hideWhenZero", _hideWhenZero);
+    }
+
+    bool ToxicityColorMixin::renderHideWhenZero()
+    {
+        return ImGuiMCP::ImGui::Checkbox("Hide When Zero", &_hideWhenZero);
+    }
+
     std::string ToxicityTextWidget::widgetConfigName() { return "ToxicityTextWidget"; }
 
     void ToxicityTextWidget::configure(const toml::table &root)
     {
         TextWidget::configure(root);
         configureToxicityColors(root, widgetConfigName());
+        configureHideWhenZero(root, widgetConfigName());
     }
 
     void ToxicityTextWidget::saveConfig(toml::table &root)
     {
         TextWidget::saveConfig(root);
         saveToxicityColors(root, widgetConfigName());
+        saveHideWhenZero(root, widgetConfigName());
     }
 
     bool ToxicityTextWidget::renderConfig(toml::table &root)
     {
         bool changed = TextWidget::renderConfig(root);
         changed |= renderToxicityColors();
+        changed |= renderHideWhenZero();
         return changed;
     }
 
     void ToxicityTextWidget::update()
     {
         float used, max;
-        if (!fetchToxicityData(used, max, widgetConfigName()))
+        if (!fetchToxicityData(used, max, widgetConfigName()) || (hideWhenZero() && used <= 0.0f))
         {
             _text = "";
             return;
@@ -122,18 +140,21 @@ namespace InfoWidgets
     {
         IconWidget::configure(root);
         configureToxicityColors(root, widgetConfigName());
+        configureHideWhenZero(root, widgetConfigName());
     }
 
     void ToxicityIconWidget::saveConfig(toml::table &root)
     {
         IconWidget::saveConfig(root);
         saveToxicityColors(root, widgetConfigName());
+        saveHideWhenZero(root, widgetConfigName());
     }
 
     bool ToxicityIconWidget::renderConfig(toml::table &root)
     {
         bool changed = IconWidget::renderConfig(root);
         changed |= renderToxicityColors();
+        changed |= renderHideWhenZero();
         return changed;
     }
 
@@ -142,6 +163,12 @@ namespace InfoWidgets
         float used, max;
         if (!fetchToxicityData(used, max, widgetConfigName()))
             return;
+        if (hideWhenZero() && used <= 0.0f)
+        {
+            _text = "";
+            return;
+        }
+        _text = _icon;
         applyToxicityColor(_valueColor, used, max);
     }
 }
