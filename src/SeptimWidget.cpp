@@ -24,10 +24,7 @@ namespace InfoWidgets
             for (auto *entry : *invChanges->entryList)
             {
                 if (entry && entry->GetObject() == gold)
-                {
-                    amount = entry->countDelta;
-                    break;
-                }
+                    amount += entry->countDelta;
             }
         }
         _text = std::format("{}", amount);
