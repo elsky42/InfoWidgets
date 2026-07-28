@@ -73,6 +73,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     /Zc:preprocessor
     /utf-8
     $<$<CONFIG:RelWithDebInfo>:/Zi>
+    $<$<CONFIG:RelWithDebInfo>:/Ob2>
 )
 
 target_link_options(${PROJECT_NAME} PRIVATE $<$<CONFIG:RelWithDebInfo>:/DEBUG>)
