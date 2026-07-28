@@ -22,7 +22,7 @@ namespace InfoWidgets
         const float regenMult = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagickaRateMult);
         const float regenPerSecond = maxMagicka * (regenRate / 100.0f) * (regenMult / 100.0f)
                                    + FlatRegenCache::get().magicka;
-        _text = std::format("{:.1f}/s", regenPerSecond);
+        _text = regenPerSecond < -1000.0f ? "-" : std::format("{:.1f}/s", regenPerSecond);
     }
 
     MagickaRegenIconWidget::MagickaRegenIconWidget()
