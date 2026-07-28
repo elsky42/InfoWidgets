@@ -19,6 +19,25 @@ namespace InfoWidgets
 
     std::string LightTextWidget::widgetConfigName() { return "LightTextWidget"; }
 
+    void LightTextWidget::configure(const toml::table &root)
+    {
+        TextWidget::configure(root);
+        configureLevelColors(root, widgetConfigName());
+    }
+
+    void LightTextWidget::saveConfig(toml::table &root)
+    {
+        TextWidget::saveConfig(root);
+        saveLevelColors(root, widgetConfigName());
+    }
+
+    bool LightTextWidget::renderConfig(toml::table &root)
+    {
+        bool changed = TextWidget::renderConfig(root);
+        changed |= renderLevelColors();
+        return changed;
+    }
+
     void LightTextWidget::update()
     {
         auto *player = RE::PlayerCharacter::GetSingleton();
@@ -29,10 +48,31 @@ namespace InfoWidgets
         }
         const float lightLevel = GetPlayerLightLevel();
         // too many updates so erase the first digit
-        _text = std::format("{:.0f}", lightLevel <= 0.0f ? 0.0f : std::ceil(lightLevel / 10.0f) * 10.0f);
+        const float roundedLightLevel = lightLevel <= 0.0f ? 0.0f : std::ceil(lightLevel / 10.0f) * 10.0f;
+        _text = std::format("{:.0f}", roundedLightLevel);
+        applyLevelColor(_valueColor, roundedLightLevel);
     }
 
     std::string LightIconWidget::widgetConfigName() { return "LightIconWidget"; }
+
+    void LightIconWidget::configure(const toml::table &root)
+    {
+        IconWidget::configure(root);
+        configureLevelColors(root, widgetConfigName());
+    }
+
+    void LightIconWidget::saveConfig(toml::table &root)
+    {
+        IconWidget::saveConfig(root);
+        saveLevelColors(root, widgetConfigName());
+    }
+
+    bool LightIconWidget::renderConfig(toml::table &root)
+    {
+        bool changed = IconWidget::renderConfig(root);
+        changed |= renderLevelColors();
+        return changed;
+    }
 
     void LightIconWidget::update()
     {
@@ -63,5 +103,6 @@ namespace InfoWidgets
         {
             _text = ICON_FA_BATTERY_FULL;
         }
+        applyLevelColor(_valueColor, lightLevel);
     }
 }
