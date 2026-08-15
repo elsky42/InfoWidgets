@@ -15,6 +15,9 @@ namespace InfoWidgets
         void saveConfig(toml::table &root) override;
         bool renderConfig(toml::table &root) override;
         void update() override;
+
+    protected:
+        float pollingIntervalSeconds() const override { return 0.25f; }
     };
 
     class LightIconWidget final : public IconWidget, public LevelColorMixin
@@ -28,5 +31,6 @@ namespace InfoWidgets
 
     protected:
         bool hasConfigurableIcon() const override { return false; }
+        float pollingIntervalSeconds() const override { return 0.25f; }
     };
 }

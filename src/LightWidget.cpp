@@ -6,15 +6,28 @@ namespace InfoWidgets
 {
     float GetPlayerLightLevel()
     {
-        const auto *player = RE::PlayerCharacter::GetSingleton();
+        auto *player = RE::PlayerCharacter::GetSingleton();
         if (!player)
             return 0.0f;
 
-        const auto *process = player->GetActorRuntimeData().currentProcess;
-        if (!process || !process->high)
+        // process->high->lightLevel does not match what GetLightLevel() (console/Papyrus)
+        // reports, by any consistent formula, so call the same underlying function instead.
+        // "player.getlightlevel" resolves through the script-function table (the one legacy
+        // scripts/conditions call functions through), not the separate console-command list.
+        static RE::SCRIPT_FUNCTION *getLightLevelFunc = nullptr;
+        if (!getLightLevelFunc)
+            getLightLevelFunc = RE::SCRIPT_FUNCTION::LocateScriptCommand("GetLightLevel");
+        if (!getLightLevelFunc || !getLightLevelFunc->conditionFunction)
+        {
+            SKSE::log::error("LightWidget: could not locate the GetLightLevel script function, widget will show 0");
+            return 0.0f;
+        }
+
+        double result = 0.0;
+        if (!getLightLevelFunc->conditionFunction(player, nullptr, nullptr, result))
             return 0.0f;
 
-        return process->high->lightLevel;
+        return static_cast<float>(result);
     }
 
     std::string LightTextWidget::widgetConfigName() { return "LightTextWidget"; }
@@ -47,8 +60,7 @@ namespace InfoWidgets
             return;
         }
         const float lightLevel = GetPlayerLightLevel();
-        // too many updates so erase the first digit
-        const float roundedLightLevel = lightLevel <= 0.0f ? 0.0f : std::ceil(lightLevel / 10.0f) * 10.0f;
+        const float roundedLightLevel = lightLevel <= 0.0f ? 0.0f : std::ceil(lightLevel);
         _text = std::format("{:.0f}", roundedLightLevel);
         applyLevelColor(_valueColor, roundedLightLevel);
     }
