@@ -1,4 +1,5 @@
 .vscode
 build
 build-lint
+build-linux-wine
 CMakeUserPresets.json
