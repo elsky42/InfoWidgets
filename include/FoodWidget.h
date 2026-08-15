@@ -12,6 +12,7 @@ namespace InfoWidgets
     constexpr float oneMinute = 60.0f;
     constexpr float fiveMinutes = 300.0f;
     constexpr float fifteenMinutes = 900.0f;
+    constexpr float oneDay = 86400.0f;
 
     class FoodNeedWidget : public TextWidget
     {
@@ -27,13 +28,16 @@ namespace InfoWidgets
         void update() override;
         std::optional<float> getRemainingSeconds();
 
+    protected:
+        ImGuiMCP::ImVec4 _imbuedFoodColor{0.25f, 0.88f, 0.82f, 1.0f};
+        bool _unavailable{false};
+
     private:
         ImGuiMCP::ImVec4 _lowColor{0.95f, 0.85f, 0.3f, 1.0f};
         ImGuiMCP::ImVec4 _criticalColor{0.95f, 0.85f, 0.3f, 1.0f};
         ImGuiMCP::ImVec4 _noneColor{0.9f, 0.2f, 0.2f, 1.0f};
 
         RE::BGSKeyword *_keyword{nullptr};
-        bool _unavailable{false};
     };
 
     class MainCourseTextWidget : public FoodNeedWidget
@@ -45,6 +49,8 @@ namespace InfoWidgets
         std::string esp() override;
         float lowThreshold() override;
         float criticalThreshold() override;
+        float imbuedFoodDurationThreshold();
+        void update() override;
     };
 
     class SnackTextWidget : public FoodNeedWidget

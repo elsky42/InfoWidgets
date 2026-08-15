@@ -16,6 +16,7 @@ namespace InfoWidgets
         _lowColor = ColorConfig::loadColorFromConfig(root.at_path(widgetConfigName() + ".lowColor"), _lowColor);
         _criticalColor = ColorConfig::loadColorFromConfig(root.at_path(widgetConfigName() + ".criticalColor"), _criticalColor);
         _noneColor = ColorConfig::loadColorFromConfig(root.at_path(widgetConfigName() + ".noneColor"), _noneColor);
+        _imbuedFoodColor = ColorConfig::loadColorFromConfig(root.at_path(widgetConfigName() + ".imbuedFoodColor"), _imbuedFoodColor);
     }
 
     void FoodNeedWidget::saveConfig(toml::table &root)
@@ -29,9 +30,12 @@ namespace InfoWidgets
             section.insert("criticalColor", toml::table{});
         if (!section.contains("noneColor"))
             section.insert("noneColor", toml::table{});
+        if (!section.contains("imbuedFoodColor"))
+            section.insert("imbuedFoodColor", toml::table{});
         ColorConfig::saveColorToConfig(_lowColor, *section.get_as<toml::table>("lowColor"));
         ColorConfig::saveColorToConfig(_criticalColor, *section.get_as<toml::table>("criticalColor"));
         ColorConfig::saveColorToConfig(_noneColor, *section.get_as<toml::table>("noneColor"));
+        ColorConfig::saveColorToConfig(_imbuedFoodColor, *section.get_as<toml::table>("imbuedFoodColor"));
     }
 
     bool FoodNeedWidget::renderConfig(toml::table &root)
@@ -40,6 +44,7 @@ namespace InfoWidgets
         changed |= ImGuiMCP::ImGui::ColorEdit4("Low Color", &_lowColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
         changed |= ImGuiMCP::ImGui::ColorEdit4("Critical Color", &_criticalColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
         changed |= ImGuiMCP::ImGui::ColorEdit4("None Color", &_noneColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
+        changed |= ImGuiMCP::ImGui::ColorEdit4("Imbued Food Color", &_imbuedFoodColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
         return changed;
     }
 
@@ -117,6 +122,17 @@ namespace InfoWidgets
     std::string MainCourseTextWidget::esp() { return "3tweaks.esp"; }
     float MainCourseTextWidget::lowThreshold() { return fifteenMinutes; }
     float MainCourseTextWidget::criticalThreshold() { return fiveMinutes; }
+    float MainCourseTextWidget::imbuedFoodDurationThreshold() { return oneDay; }
+
+    void MainCourseTextWidget::update()
+    {
+        FoodNeedWidget::update();
+        if (_unavailable)
+            return;
+        auto remaining = getRemainingSeconds();
+        if (remaining && *remaining > imbuedFoodDurationThreshold())
+            _valueColor = _imbuedFoodColor;
+    }
 
     SnackTextWidget::SnackTextWidget()
     {
