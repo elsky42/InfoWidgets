@@ -136,6 +136,8 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(sleepIconWidget);
     static ShoutCooldownTextWidget shoutCooldownTextWidget;
     WIDGET_RENDER_FUNCTION(shoutCooldownTextWidget);
+    static ShoutCooldownIconWidget shoutCooldownIconWidget;
+    WIDGET_RENDER_FUNCTION(shoutCooldownIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -183,7 +185,8 @@ namespace InfoWidgets::PluginHUD
         &spellPowerTextWidget,
         &spellPowerIconWidget,
         &sleepIconWidget,
-        &shoutCooldownTextWidget};
+        &shoutCooldownTextWidget,
+        &shoutCooldownIconWidget};
 
     static void saveConfig()
     {
@@ -429,6 +432,7 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Septim Text", renderseptimTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Icon", rendershockResistIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Text", rendershockResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Shout Cooldown Icon", rendershoutCooldownIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shout Cooldown Text", rendershoutCooldownTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Sleep Icon", rendersleepIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Snack Text", rendersnackTextWidgetSettings);
