@@ -55,12 +55,12 @@ namespace InfoWidgets
     private:
         float _deltaTime{0.0f};
 
-        // Tick returns true when an update is due (every 1 second).
+        // Tick returns true when an update is due (every intervalSeconds).
         friend class BaseTextWidget;
-        bool tick(float dt)
+        bool tick(float dt, float intervalSeconds)
         {
             _deltaTime += dt;
-            if (_deltaTime >= 1.0f)
+            if (_deltaTime >= intervalSeconds)
             {
                 _deltaTime = 0.0f;
                 return true;

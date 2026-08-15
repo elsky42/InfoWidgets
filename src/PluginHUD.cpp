@@ -20,6 +20,7 @@
 #include "NoiseWidget.h"
 #include "ResistWidget.h"
 #include "SeptimWidget.h"
+#include "ShoutCooldownWidget.h"
 #include "SleepWidget.h"
 #include "SpellPowerWidget.h"
 #include "StaminaRegenWidget.h"
@@ -133,6 +134,8 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(spellPowerIconWidget);
     static SleepIconWidget sleepIconWidget;
     WIDGET_RENDER_FUNCTION(sleepIconWidget);
+    static ShoutCooldownTextWidget shoutCooldownTextWidget;
+    WIDGET_RENDER_FUNCTION(shoutCooldownTextWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -179,7 +182,8 @@ namespace InfoWidgets::PluginHUD
         &septimIconWidget,
         &spellPowerTextWidget,
         &spellPowerIconWidget,
-        &sleepIconWidget};
+        &sleepIconWidget,
+        &shoutCooldownTextWidget};
 
     static void saveConfig()
     {
@@ -425,6 +429,7 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Septim Text", renderseptimTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Icon", rendershockResistIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Shock Resist Text", rendershockResistTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Shout Cooldown Text", rendershoutCooldownTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Sleep Icon", rendersleepIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Snack Text", rendersnackTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Spell Power Icon", renderspellPowerIconWidgetSettings);

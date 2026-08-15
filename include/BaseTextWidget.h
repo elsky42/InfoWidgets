@@ -48,6 +48,7 @@ namespace InfoWidgets
 
     protected:
         virtual void update() = 0;
+        virtual float pollingIntervalSeconds() const { return 1.0f; }
         void render();
 
         std::string _text;

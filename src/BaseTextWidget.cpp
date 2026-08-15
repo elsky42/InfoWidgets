@@ -70,7 +70,7 @@ namespace InfoWidgets
             }
             return;
         }
-        if (PollingMixin::tick(deltaTime))
+        if (PollingMixin::tick(deltaTime, pollingIntervalSeconds()))
             update();
         render();
         _wasEnabled = true;
