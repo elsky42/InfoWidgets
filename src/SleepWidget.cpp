@@ -19,6 +19,7 @@ namespace InfoWidgets
         _restedColor = ColorConfig::loadColorFromConfig(root.at_path(s + ".restedColor"), _restedColor);
         _wellRestedColor = ColorConfig::loadColorFromConfig(root.at_path(s + ".wellRestedColor"), _wellRestedColor);
         _loversComfortColor = ColorConfig::loadColorFromConfig(root.at_path(s + ".loversComfortColor"), _loversComfortColor);
+        _werewolfColor = ColorConfig::loadColorFromConfig(root.at_path(s + ".werewolfColor"), _werewolfColor);
         _hideWhenWellRested = root.at_path(s + ".hideWhenWellRested").value_or(_hideWhenWellRested);
         _hideWhenWerewolf = root.at_path(s + ".hideWhenWerewolf").value_or(_hideWhenWerewolf);
     }
@@ -35,10 +36,13 @@ namespace InfoWidgets
             sec.insert("wellRestedColor", toml::table{});
         if (!sec.contains("loversComfortColor"))
             sec.insert("loversComfortColor", toml::table{});
+        if (!sec.contains("werewolfColor"))
+            sec.insert("werewolfColor", toml::table{});
         ColorConfig::saveColorToConfig(_notRestedColor, *sec.get_as<toml::table>("notRestedColor"));
         ColorConfig::saveColorToConfig(_restedColor, *sec.get_as<toml::table>("restedColor"));
         ColorConfig::saveColorToConfig(_wellRestedColor, *sec.get_as<toml::table>("wellRestedColor"));
         ColorConfig::saveColorToConfig(_loversComfortColor, *sec.get_as<toml::table>("loversComfortColor"));
+        ColorConfig::saveColorToConfig(_werewolfColor, *sec.get_as<toml::table>("werewolfColor"));
         sec.insert_or_assign("hideWhenWellRested", _hideWhenWellRested);
         sec.insert_or_assign("hideWhenWerewolf", _hideWhenWerewolf);
     }
@@ -50,6 +54,7 @@ namespace InfoWidgets
         changed |= ImGuiMCP::ImGui::ColorEdit4("Rested Color", &_restedColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
         changed |= ImGuiMCP::ImGui::ColorEdit4("Well Rested Color", &_wellRestedColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
         changed |= ImGuiMCP::ImGui::ColorEdit4("Lover's Comfort Color", &_loversComfortColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
+        changed |= ImGuiMCP::ImGui::ColorEdit4("Werewolf Color", &_werewolfColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
         changed |= ImGuiMCP::ImGui::Checkbox("Hide When Well Rested", &_hideWhenWellRested);
         changed |= ImGuiMCP::ImGui::Checkbox("Hide When Werewolf", &_hideWhenWerewolf);
         return changed;
@@ -60,14 +65,14 @@ namespace InfoWidgets
         if (_unavailable)
             return SleepLevel::NotRested;
 
-        if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell || !_werewolfRace)
+        if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell || !_werewolfSpell)
         {
             auto *handler = RE::TESDataHandler::GetSingleton();
             _restedSpell = handler->LookupForm<RE::SpellItem>(0x0FB981, "Skyrim.esm");
             _wellRestedSpell = handler->LookupForm<RE::SpellItem>(0x0FB984, "Skyrim.esm");
             _loversComfortSpell = handler->LookupForm<RE::SpellItem>(0x0CDA1D, "Skyrim.esm");
-            _werewolfRace = handler->LookupForm<RE::TESRace>(0x0CDD84, "Skyrim.esm");
-            if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell || !_werewolfRace)
+            _werewolfSpell = handler->LookupForm<RE::SpellItem>(0x0A1A3E, "Skyrim.esm");
+            if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell || !_werewolfSpell)
             {
                 SKSE::log::error("SleepIconWidget: failed to look up sleep forms from Skyrim.esm");
                 _unavailable = true;
@@ -79,7 +84,7 @@ namespace InfoWidgets
         if (!player)
             return SleepLevel::NotRested;
 
-        if (player->GetRace() == _werewolfRace)
+        if (player->HasSpell(_werewolfSpell))
             return SleepLevel::Werewolf;
 
         if (player->HasSpell(_loversComfortSpell))
@@ -98,7 +103,7 @@ namespace InfoWidgets
         if (level == SleepLevel::Werewolf)
         {
             _text = _hideWhenWerewolf ? "" : ICON_FA_PAW;
-            _valueColor = _notRestedColor;
+            _valueColor = _werewolfColor;
             return;
         }
 

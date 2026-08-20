@@ -29,13 +29,14 @@ namespace InfoWidgets
         RE::SpellItem *_restedSpell = nullptr;
         RE::SpellItem *_wellRestedSpell = nullptr;
         RE::SpellItem *_loversComfortSpell = nullptr;
-        RE::TESRace *_werewolfRace = nullptr;
+        RE::SpellItem *_werewolfSpell = nullptr;
         bool _unavailable{false};
 
         ImGuiMCP::ImVec4 _notRestedColor{0.9f, 0.1f, 0.1f, 1.0f};
         ImGuiMCP::ImVec4 _restedColor{1.0f, 0.85f, 0.0f, 1.0f};
         ImGuiMCP::ImVec4 _wellRestedColor{1.0f, 1.0f, 1.0f, 1.0f};
         ImGuiMCP::ImVec4 _loversComfortColor{0.25f, 0.88f, 0.82f, 1.0f};
+        ImGuiMCP::ImVec4 _werewolfColor{0.2f, 0.8f, 0.2f, 1.0f};
 
         bool _hideWhenWellRested{false};
         bool _hideWhenWerewolf{false};

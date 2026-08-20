@@ -94,8 +94,6 @@ namespace InfoWidgets
         return ImGuiMCP::ImGui::Checkbox("Only Show When Shout Selected", &_requireShoutSelected);
     }
 
-    // ---- ShoutCooldownTextWidget ----
-
     std::string ShoutCooldownTextWidget::widgetConfigName() { return "ShoutCooldownTextWidget"; }
 
     void ShoutCooldownTextWidget::configure(const toml::table &root)
@@ -136,8 +134,6 @@ namespace InfoWidgets
         _text = std::format("{:.0f}", std::ceil(remaining));
         applyCooldownColor(_valueColor, remaining);
     }
-
-    // ---- ShoutCooldownIconWidget ----
 
     ShoutCooldownIconWidget::ShoutCooldownIconWidget()
     {
