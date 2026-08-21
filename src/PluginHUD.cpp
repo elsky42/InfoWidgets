@@ -9,6 +9,7 @@
 #include "PCH.h"
 #include "AttackSpeedWidget.h"
 #include "CarryWeightWidget.h"
+#include "ChargeWidget.h"
 #include "D3DRenderer.h"
 #include "FlatRegenCache.h"
 #include "FoodWidget.h"
@@ -138,6 +139,14 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(shoutCooldownTextWidget);
     static ShoutCooldownIconWidget shoutCooldownIconWidget;
     WIDGET_RENDER_FUNCTION(shoutCooldownIconWidget);
+    static MainHandChargeTextWidget mainHandChargeTextWidget;
+    WIDGET_RENDER_FUNCTION(mainHandChargeTextWidget);
+    static OffHandChargeTextWidget offHandChargeTextWidget;
+    WIDGET_RENDER_FUNCTION(offHandChargeTextWidget);
+    static MainHandChargeIconWidget mainHandChargeIconWidget;
+    WIDGET_RENDER_FUNCTION(mainHandChargeIconWidget);
+    static OffHandChargeIconWidget offHandChargeIconWidget;
+    WIDGET_RENDER_FUNCTION(offHandChargeIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -186,7 +195,11 @@ namespace InfoWidgets::PluginHUD
         &spellPowerIconWidget,
         &sleepIconWidget,
         &shoutCooldownTextWidget,
-        &shoutCooldownIconWidget};
+        &shoutCooldownIconWidget,
+        &mainHandChargeTextWidget,
+        &offHandChargeTextWidget,
+        &mainHandChargeIconWidget,
+        &offHandChargeIconWidget};
 
     static void saveConfig()
     {
@@ -420,12 +433,16 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Main Course Text", rendermainCourseTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Attack Speed Icon", rendermainHandAttackSpeedIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Attack Speed Text", rendermainHandAttackSpeedTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Charge Icon", rendermainHandChargeIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Charge Text", rendermainHandChargeTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Icon", rendermovementSpeedIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Text", rendermovementSpeedTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Noise Icon", rendernoiseIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Noise Text", rendernoiseTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Off Hand Attack Speed Icon", renderoffHandAttackSpeedIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Off Hand Attack Speed Text", renderoffHandAttackSpeedTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Off Hand Charge Icon", renderoffHandChargeIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Off Hand Charge Text", renderoffHandChargeTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Poison Resist Icon", renderpoisonResistIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Poison Resist Text", renderpoisonResistTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Septim Icon", renderseptimIconWidgetSettings);
