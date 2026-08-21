@@ -25,7 +25,7 @@ namespace InfoWidgets
         {
             bool changed = PollingMixin::renderConfig();
             changed |= RectMixin::renderConfig();
-            changed |= ColoredMixin::renderConfig();
+            changed |= ColoredMixin::renderConfig(hasConfigurableColor());
             return changed;
         }
 
@@ -49,6 +49,7 @@ namespace InfoWidgets
     protected:
         virtual void update() = 0;
         virtual float pollingIntervalSeconds() const { return 1.0f; }
+        virtual bool hasConfigurableColor() const { return true; }
         void render();
 
         std::string _text;

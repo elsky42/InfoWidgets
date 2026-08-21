@@ -236,9 +236,11 @@ namespace InfoWidgets
             sec.insert_or_assign("outlineSize", _outlineSize);
         }
 
-        bool renderConfig()
+        bool renderConfig(bool showColor = true)
         {
-            bool changed = ImGuiMCP::ImGui::ColorEdit4("Color", &_color.x, ImGuiMCP::ImGuiColorEditFlags_Float);
+            bool changed = false;
+            if (showColor)
+                changed |= ImGuiMCP::ImGui::ColorEdit4("Color", &_color.x, ImGuiMCP::ImGuiColorEditFlags_Float);
             changed |= ImGuiMCP::ImGui::ColorEdit4("Outline Color", &_outlineColor.x, ImGuiMCP::ImGuiColorEditFlags_Float);
             changed |= ImGuiMCP::ImGui::DragInt("Outline Size", &_outlineSize, 0.1f, 0, 8);
             return changed;

@@ -36,6 +36,7 @@ namespace InfoWidgets
         void update() override;
 
     protected:
+        bool hasConfigurableColor() const override { return false; }
         bool _isOffHand{false};
     };
 
@@ -62,6 +63,7 @@ namespace InfoWidgets
         void update() override;
 
     protected:
+        bool hasConfigurableColor() const override { return false; }
         bool _isOffHand{false};
     };
 

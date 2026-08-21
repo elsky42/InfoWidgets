@@ -23,6 +23,9 @@ namespace InfoWidgets
         bool renderConfig(toml::table &root) override;
         void update() override;
 
+    protected:
+        bool hasConfigurableColor() const override { return false; }
+
     private:
         SleepLevel sleepLevel();
 
