@@ -65,14 +65,13 @@ namespace InfoWidgets
         if (_unavailable)
             return SleepLevel::NotRested;
 
-        if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell || !_werewolfSpell)
+        if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell)
         {
             auto *handler = RE::TESDataHandler::GetSingleton();
             _restedSpell = handler->LookupForm<RE::SpellItem>(0x0FB981, "Skyrim.esm");
             _wellRestedSpell = handler->LookupForm<RE::SpellItem>(0x0FB984, "Skyrim.esm");
             _loversComfortSpell = handler->LookupForm<RE::SpellItem>(0x0CDA1D, "Skyrim.esm");
-            _werewolfSpell = handler->LookupForm<RE::SpellItem>(0x0A1A3E, "Skyrim.esm");
-            if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell || !_werewolfSpell)
+            if (!_restedSpell || !_wellRestedSpell || !_loversComfortSpell)
             {
                 SKSE::log::error("SleepIconWidget: failed to look up sleep forms from Skyrim.esm");
                 _unavailable = true;
@@ -80,11 +79,19 @@ namespace InfoWidgets
             }
         }
 
+        if (!_werewolfGlobal)
+        {
+            auto *handler = RE::TESDataHandler::GetSingleton();
+            _werewolfGlobal = handler->LookupForm<RE::TESGlobal>(0x0ED06C, "Skyrim.esm");
+            if (!_werewolfGlobal)
+                SKSE::log::error("SleepIconWidget: failed to look up the werewolf-detection global from Skyrim.esm");
+        }
+
         auto *player = RE::PlayerCharacter::GetSingleton();
         if (!player)
             return SleepLevel::NotRested;
 
-        if (player->HasSpell(_werewolfSpell))
+        if (_werewolfGlobal && _werewolfGlobal->value != 0.0f)
             return SleepLevel::Werewolf;
 
         if (player->HasSpell(_loversComfortSpell))
