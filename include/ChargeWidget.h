@@ -37,6 +37,7 @@ namespace InfoWidgets
 
     protected:
         bool hasConfigurableColor() const override { return false; }
+        float pollingIntervalSeconds() const override { return 0.2f; }
         bool _isOffHand{false};
     };
 
@@ -64,6 +65,7 @@ namespace InfoWidgets
 
     protected:
         bool hasConfigurableColor() const override { return false; }
+        float pollingIntervalSeconds() const override { return 0.2f; }
         bool _isOffHand{false};
     };
 

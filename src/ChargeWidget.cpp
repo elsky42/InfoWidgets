@@ -23,7 +23,6 @@ namespace InfoWidgets
 
         auto *enchantment = weapon->formEnchanting;
         float maxChargePoints = static_cast<float>(weapon->amountofEnchantment);
-        float currentChargePoints = maxChargePoints;
 
         auto *entryData = player->GetEquippedEntryData(isOffHand);
         if (entryData && entryData->extraLists)
@@ -32,18 +31,11 @@ namespace InfoWidgets
             {
                 if (!xList)
                     continue;
-                auto *xCharge = xList->GetByType<RE::ExtraCharge>();
                 auto *xEnch = xList->GetByType<RE::ExtraEnchantment>();
                 if (xEnch && xEnch->enchantment && xEnch->charge != 0)
                 {
                     enchantment = xEnch->enchantment;
                     maxChargePoints = static_cast<float>(xEnch->charge);
-                    currentChargePoints = xCharge ? xCharge->charge : maxChargePoints;
-                    break;
-                }
-                else if (xCharge && weapon->formEnchanting && weapon->amountofEnchantment != 0)
-                {
-                    currentChargePoints = xCharge->charge;
                     break;
                 }
             }
@@ -55,6 +47,9 @@ namespace InfoWidgets
         const float costPerUse = enchantment->CalculateMagickaCost(player);
         if (costPerUse <= 0.0f)
             return std::nullopt;
+
+        const auto chargeAV = isOffHand ? RE::ActorValue::kLeftItemCharge : RE::ActorValue::kRightItemCharge;
+        const float currentChargePoints = std::max(0.0f, player->AsActorValueOwner()->GetActorValue(chargeAV));
 
         WeaponCharge result;
         result.total = std::round(maxChargePoints / costPerUse);
