@@ -61,7 +61,7 @@ namespace InfoWidgets
 
     void BaseTextWidget::updateAndRender(float deltaTime)
     {
-        if (!_enabled)
+        if (!PollingMixin::shouldRun())
         {
             if (_wasEnabled)
             {

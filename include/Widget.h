@@ -35,22 +35,38 @@ namespace InfoWidgets
             if (root.empty())
                 return;
             _enabled = root.at_path(section + ".enabled").value_or(false);
+            _onlyInCombat = root.at_path(section + ".onlyInCombat").value_or(false);
         }
 
         void saveConfig(toml::table &root, const std::string &section)
         {
             if (!root.contains(section))
                 root.insert(section, toml::table{{"enabled", true}});
-            root.get_as<toml::table>(section)->insert_or_assign("enabled", _enabled);
+            auto &sec = *root.get_as<toml::table>(section);
+            sec.insert_or_assign("enabled", _enabled);
+            sec.insert_or_assign("onlyInCombat", _onlyInCombat);
         }
 
         bool renderConfig()
         {
-            return ImGuiMCP::ImGui::Checkbox("Enabled", &_enabled);
+            bool changed = ImGuiMCP::ImGui::Checkbox("Enabled", &_enabled);
+            changed |= ImGuiMCP::ImGui::Checkbox("Only In Combat", &_onlyInCombat);
+            return changed;
+        }
+
+        bool shouldRun() const
+        {
+            if (!_enabled)
+                return false;
+            if (!_onlyInCombat)
+                return true;
+            auto *player = RE::PlayerCharacter::GetSingleton();
+            return player && player->IsInCombat();
         }
 
     protected:
         bool _enabled{false};
+        bool _onlyInCombat{false};
 
     private:
         float _deltaTime{0.0f};
