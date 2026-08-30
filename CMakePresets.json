@@ -15,7 +15,8 @@
       "name": "release",
       "displayName": "Release",
       "description": "MSVC release build",
-      "inherits": "base"
+      "inherits": "base",
+      "generator": "Ninja"
     },
     {
       "name": "lint",

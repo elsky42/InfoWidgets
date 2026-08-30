@@ -21,8 +21,10 @@ jobs:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: ilammy/msvc-dev-cmd@v1
+
       - name: Set up sccache
-        uses: mozilla/sccache-action@v0.0.5
+        uses: mozilla/sccache-action@v0.0.11
 
       - name: Set up vcpkg binary cache
         shell: bash
