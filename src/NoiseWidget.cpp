@@ -34,7 +34,7 @@ namespace InfoWidgets
             _text = "";
             return;
         }
-        const float noise = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMovementNoiseMult);
+        const float noise = std::max(0.0f, player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMovementNoiseMult));
         const float noisePercent = std::ceil(noise * 100.0f);
         _text = std::format("{:.0f}", noisePercent);
         applyLevelColor(_valueColor, noisePercent);
@@ -69,8 +69,8 @@ namespace InfoWidgets
             _text = "";
             return;
         }
-        const float noise = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMovementNoiseMult);
-        if (noise < 0)
+        const float noise = std::max(0.0f, player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMovementNoiseMult));
+        if (noise == 0.0f)
         {
             _text = ICON_FA_VOLUME_OFF;
         }
