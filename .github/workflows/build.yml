@@ -64,6 +64,8 @@ jobs:
 
       - uses: ilammy/msvc-dev-cmd@v1
 
+      - uses: seanmiddleditch/gha-setup-ninja@v4
+
       - name: Set up sccache
         uses: mozilla/sccache-action@v0.0.11
 
@@ -80,6 +82,8 @@ jobs:
           restore-keys: vcpkg-x64-windows-static-md-
 
       - name: Configure CMake
+        env:
+          VCPKG_ROOT: C:/vcpkg
         run: cmake --preset release -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
       - name: Build
