@@ -25,6 +25,7 @@
 #include "SleepWidget.h"
 #include "SpellPowerWidget.h"
 #include "StaminaRegenWidget.h"
+#include "TimeOfDayWidget.h"
 #include "ToxicityWidget.h"
 #include "VampireStageWidget.h"
 #include "Version.h"
@@ -147,6 +148,10 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(mainHandChargeIconWidget);
     static OffHandChargeIconWidget offHandChargeIconWidget;
     WIDGET_RENDER_FUNCTION(offHandChargeIconWidget);
+    static TimeOfDayTextWidget timeOfDayTextWidget;
+    WIDGET_RENDER_FUNCTION(timeOfDayTextWidget);
+    static TimeOfDayIconWidget timeOfDayIconWidget;
+    WIDGET_RENDER_FUNCTION(timeOfDayIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -199,7 +204,9 @@ namespace InfoWidgets::PluginHUD
         &mainHandChargeTextWidget,
         &offHandChargeTextWidget,
         &mainHandChargeIconWidget,
-        &offHandChargeIconWidget};
+        &offHandChargeIconWidget,
+        &timeOfDayTextWidget,
+        &timeOfDayIconWidget};
 
     static void saveConfig()
     {
@@ -457,6 +464,8 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Spell Power Text", renderspellPowerTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Icon", renderstaminaRegenIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Stamina Regen Text", renderstaminaRegenTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Time Of Day Icon", rendertimeOfDayIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Time Of Day Text", rendertimeOfDayTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Toxicity Icon", rendertoxicityIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Toxicity Text", rendertoxicityTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Vampire Stage Icon", rendervampireStageIconWidgetSettings);
