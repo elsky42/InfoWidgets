@@ -17,7 +17,8 @@ namespace InfoWidgets
             _text = "";
             return;
         }
-        const float maxMagicka = player->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kMagicka);
+        const float maxMagicka = player->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kMagicka)
+                                + player->GetActorValueModifier(RE::ACTOR_VALUE_MODIFIERS::kTemporary, RE::ActorValue::kMagicka);
         const float regenRate = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagickaRate);
         const float regenMult = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagickaRateMult);
         const float regenPerSecond = maxMagicka * (regenRate / 100.0f) * (regenMult / 100.0f)

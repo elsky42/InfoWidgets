@@ -17,7 +17,8 @@ namespace InfoWidgets
             _text = "";
             return;
         }
-        const float maxStamina = player->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kStamina);
+        const float maxStamina = player->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kStamina)
+                                + player->GetActorValueModifier(RE::ACTOR_VALUE_MODIFIERS::kTemporary, RE::ActorValue::kStamina);
         const float regenRate = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStaminaRate);
         const float regenMult = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStaminaRateMult);
         const float regenPerSecond = maxStamina * (regenRate / 100.0f) * (regenMult / 100.0f)
