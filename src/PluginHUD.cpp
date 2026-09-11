@@ -17,6 +17,7 @@
 #include "LightWidget.h"
 #include "HealthRegenWidget.h"
 #include "MagickaRegenWidget.h"
+#include "MassWidget.h"
 #include "MovementSpeedWidget.h"
 #include "NoiseWidget.h"
 #include "ResistWidget.h"
@@ -152,6 +153,10 @@ namespace InfoWidgets::PluginHUD
     WIDGET_RENDER_FUNCTION(timeOfDayTextWidget);
     static TimeOfDayIconWidget timeOfDayIconWidget;
     WIDGET_RENDER_FUNCTION(timeOfDayIconWidget);
+    static MassTextWidget massTextWidget;
+    WIDGET_RENDER_FUNCTION(massTextWidget);
+    static MassIconWidget massIconWidget;
+    WIDGET_RENDER_FUNCTION(massIconWidget);
 
     static std::vector<Widget *> widgets = {
         &noiseTextWidget,
@@ -206,7 +211,9 @@ namespace InfoWidgets::PluginHUD
         &mainHandChargeIconWidget,
         &offHandChargeIconWidget,
         &timeOfDayTextWidget,
-        &timeOfDayIconWidget};
+        &timeOfDayIconWidget,
+        &massTextWidget,
+        &massIconWidget};
 
     static void saveConfig()
     {
@@ -442,6 +449,8 @@ namespace InfoWidgets::PluginHUD
         SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Attack Speed Text", rendermainHandAttackSpeedTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Charge Icon", rendermainHandChargeIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Main Hand Charge Text", rendermainHandChargeTextWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Mass Icon", rendermassIconWidgetSettings);
+        SKSEMenuFramework::AddSectionItem("Widgets / Mass Text", rendermassTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Icon", rendermovementSpeedIconWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Movement Speed Text", rendermovementSpeedTextWidgetSettings);
         SKSEMenuFramework::AddSectionItem("Widgets / Noise Icon", rendernoiseIconWidgetSettings);
